@@ -1,7 +1,7 @@
 # PiNode3
 PiNode3は農業ハウス内で動作するデータ収集システムです．
 
-# Installation
+# インストール
 
 ### I2C有効化
 温度，湿度，照度データはI2Cを用いて取得しています．Raspberry PiではデフォルトではI2Cからの通信を無効化しているため，
@@ -19,7 +19,7 @@ $ sudo raspi-config
 3 Interfacing Options -> I3 SPIと進み，YESを選択します．
 I2C，SPIを有効化した後はリブートすることで適応されます．
 
-## ソフトウェアインストール
+### ソフトウェアインストール
 本リポジトリをクローンし，ソフトウェアをインストールします．
 
 リポジトリクローン
@@ -35,6 +35,16 @@ bash install.sh
 
 以上でインストールは環境です．その他の設定等は[こちら]()を参照してください．
 
+# データの確認
+本ソフトウェアはInfluxDBを使用しています．そのためダッシュボードを作成することでセンサデータの確認を容易に行うことができます．
+本章ではダッシュボードの作成方法を解説します．
+
 
 # フォルダ構成
-<img src="./images/folder.png" alt="フォルダ構成">
+## Gitリポジトリ構成
+クローンした際のリポジトリ構成を以下に示します．
+<img src="./images/git-repository.png" alt="Gitリポジトリ構成">
+
+## インストール後内部構成
+<img src="./images/folder-software.png" alt="ソフトウェアフォルダ構成">
+<img src="./images/folder-config-data.png" alt="設定・データフォルダ構成">
