@@ -1,0 +1,11 @@
+[Unit]
+Description=Read Sensor and Shoot Camera app
+
+[Service]
+Type=simple
+WorkingDirectory=/usr/local/bin/pinode3
+ExecStart=/usr/local/bin/pinode3/python/pinode3/bin/python data_collector.py
+User=pi
+
+[Install]
+WantedBy=multi-user.target

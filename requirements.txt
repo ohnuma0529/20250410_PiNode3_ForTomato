@@ -1,0 +1,7 @@
+influxdb-client
+pandas
+opencv-python
+spidev
+timeout-decorator
+pyserial
+cobs

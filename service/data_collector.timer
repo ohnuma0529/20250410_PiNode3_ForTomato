@@ -1,0 +1,8 @@
+[Unit]
+Description=Collect Image and Sensor
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+
+[Install]
+WantedBy=timers.target
