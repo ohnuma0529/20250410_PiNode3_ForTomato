@@ -5,3 +5,4 @@ spidev
 timeout-decorator
 pyserial
 cobs
+Sphinx
