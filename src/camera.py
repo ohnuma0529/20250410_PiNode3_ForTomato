@@ -13,10 +13,27 @@ from usb import USB
 import util
 
 class Camera:
+    """
+    /TODO: いい感じにして
+    Camera Class for handling image capture from different devices.
+    
+    Attributes:
+        config (dict): Configuration settings for the PiNode device.
+    """
     def __init__(self):
+        """
+        Initializes the Camera class with the PiNode configuration.
+        """
         self.config = util.get_pinode_config()
 
     def save_images(self):
+        """
+        Captures and saves images from connected devices.
+        
+        This method retrieves a list of connected USB devices and captures images from
+        devices identified as either 'SPRESENSE' or 'USB Camera'. The images are saved
+        with a filename that includes the device ID, port number, and current timestamp.
+        """
         devices = USB().get()
         for port, type, name in devices:
             if type == 'SPRESENSE':
@@ -27,6 +44,9 @@ class Camera:
                 UsbCamera(name).save(file_name)
 
 class SPRESENSE:
+    """
+        This is SPRESENSE Class.
+    """
     BAUD_RATE   = 115200  # ボーレート
     BUFF_SIZE   = 100  # 1回の通信で送られてくるデータサイズ
     TYPE_INFO   = 0
