@@ -2,6 +2,9 @@ import os
 import subprocess
 
 class USB:
+    """
+    USBからの情報取得
+    """
     def get(self):
         self.ports = self._get_connect_ports()
         self.identifys = [self._identify_usb_device(port) for port in self.ports]
