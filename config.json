@@ -14,7 +14,9 @@
 			"i_v_light"     : "/usr/local/bin/read_sensor -t s1133 -i 0",
 			"u_v_light"     : "/usr/local/bin/read_sensor -t s1133 -i 1",
 			"temperature"   : "/usr/local/bin/read_sensor -t sht25 -i 0 -m temp",
-			"humidity"      : "/usr/local/bin/read_sensor -t sht25 -i 0 -m humi"
+			"humidity"      : "/usr/local/bin/read_sensor -t sht25 -i 0 -m humi",
+			"temperature_hq": "",
+			"humidity_hq"	: ""
 		},
 		"spi_channel" : {
 			"stem"          : 0,
@@ -25,6 +27,8 @@
 			"u_v_light" 	: 0,
 			"temperature" 	: -40,
 			"humidity" 		: 0,
+			"temperature_hq": -40,
+			"humidity_hq"	: 0,
 			"stem" 			: 0.01,
 			"fruit_diagram" : 0.01
 		},
@@ -33,6 +37,8 @@
 			"u_v_light" 	: 1000000,
 			"temperature" 	: 125,
 			"humidity" 		: 100,
+			"temperature_hq": 125,
+			"humidity_hq"	: 100,
 			"stem" 			: 5,
 			"fruit_diagram" : 2
 		},
@@ -41,6 +47,8 @@
 			"u_v_light" 	: 0.1,
 			"temperature" 	: 0.1,
 			"humidity" 		: 0.1,
+			"temperature_hq": 0.1,
+			"humidity_hq"	: 0.1,
 			"stem" 			: 0.1,
 			"fruit_diagram" : 0.1
 		},
@@ -49,6 +57,8 @@
 			"u_v_light" 	: 3,
 			"temperature" 	: 3,
 			"humidity" 		: 3,
+			"temperature_hq": 3,
+			"humidity_hq"	: 3,
 			"stem" 			: 3,
 			"fruit_diagram" : 3
 		},
@@ -57,6 +67,8 @@
 			"u_v_light" 	: 0.3,
 			"temperature" 	: 0.3,
 			"humidity" 		: 0.3,
+			"temperature_hq": 0.3,
+			"humidity_hq"	: 0.3,
 			"stem" 			: 0.5,
 			"fruit_diagram" : 0.5
 		}
