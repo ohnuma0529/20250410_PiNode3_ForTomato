@@ -7,6 +7,7 @@ from enum import Enum
 from pathlib import Path
 from datetime import datetime, timezone
 import pandas as pd
+import read_sensor
 
 import util
 from db import InfluxDB
@@ -35,6 +36,7 @@ class MCP3204:
 
 class Sensor:
     def __init__(self):
+        read_sensor.init_pigpio()
         self.config = util.get_pinode_config()
 
         self.previous_data_path = self.config['sensor']['previous_data_path']
@@ -46,29 +48,37 @@ class Sensor:
     
     def get(self, sensor:str):
         for _ in range(self.config['sensor']['max_retry_count'][sensor]):
-            data = self._get_raw_data(sensor)
-            time.sleep(self.config['sensor']['sleep_time'][sensor])
-            result = self._is_valid(data, sensor)
-            if result == SensorResult.SUCCESS:
-                # 前回値を保存
-                with open(self.previous_data_path, 'w') as f:
-                    self.previous_sensor_data[sensor] = float(data)
-                    json.dump(self.previous_sensor_data, f, indent=4)
-                return result, float(data)
-            self._retry(sensor)
+            try:
+                data = read_sensor.get(sensor)
+                time.sleep(self.config['sensor']['sleep_time'][sensor])
+                result = self._is_valid(data, sensor)
+                if result == SensorResult.SUCCESS:
+                    # 前回値を保存
+                    with open(self.previous_data_path, 'w') as f:
+                        self.previous_sensor_data[sensor] = float(data)
+                        json.dump(self.previous_sensor_data, f, indent=4)
+                    return result, float(data)
+            except Exception as e:
+                print(e)
+            finally:
+                time.sleep(self.config['sensor']['retry_interval'][sensor])
         # 取得失敗した場合は前回値を渡す
         return result, self.previous_sensor_data[sensor]
 
     def upload_csv(self, upload_sensor_list=[]):
-        upload_sensor_list = ["temperature", "humidity", "i_v_light", "u_v_light"] if len(upload_sensor_list) == 0 else upload_sensor_list
+        upload_sensor_list = ["temperature", "humidity", "i_v_light", "u_v_light", "temperature_hq", "humidity_hq", "stem", "fruit_diagram"] if len(upload_sensor_list) == 0 else upload_sensor_list
         sensor = Sensor()
+
+        
+
         df = pd.DataFrame(
             data  = {sensor_name: [sensor.get(sensor_name)[1]] for sensor_name in upload_sensor_list},
             index = [datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')]
         )
         try:
             InfluxDB().upload_dataframe(df)
-        except:
+        except Exception as e:
+            print(e)
             csv_path = Path(self.config['sensor']['csv_dir']) / f"{self.config['device_id']}_{datetime.now().strftime('%Y%m%d-%H%M.csv')}"
             df.to_csv(csv_path)
 
@@ -88,12 +98,6 @@ class Sensor:
         else:
             raise ValueError(f"sensor: {sensor} is not found in config.json")
         return data
-    
-    def _retry(self, sensor:str):
-        if sensor in self.i2c_sensor_list:
-            self._gpio_init(sensor)
-        else:
-            time.sleep(self.config['sensor']['retry_interval'][sensor])
     
     def _is_valid(self, data, sensor:str):
         if not data:  # 空文字を確認

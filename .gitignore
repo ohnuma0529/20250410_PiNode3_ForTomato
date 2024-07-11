@@ -55,3 +55,6 @@ coverage.xml
 docs/_build/
 docs/_static/
 docs/_templates/
+
+# token.txtは追跡しない
+src/token.txt
