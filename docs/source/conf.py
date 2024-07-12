@@ -35,3 +35,6 @@ language = 'jp'
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
+
+autodoc_default_options = {'private-members': True,   # プライベートメソッドも出力
+                           'show-inheritance': True}  # 継承を表示
