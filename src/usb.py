@@ -5,6 +5,7 @@ class USB:
     """
     USBからの情報取得
     camera.pyから呼び出される
+    camera.pyから呼び出される
     """
     def get(self):
         """
