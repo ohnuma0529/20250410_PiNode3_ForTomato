@@ -56,7 +56,7 @@ class USB:
         接続されているUSB機器のデバイス名を取得
         
         Parameters: 
-        port(list[int]): USB接続している機器のポート番号
+        port(int): USB接続している機器のポート番号
 
         Returns:
         'SPRESENSE'(str) or 'USB Camera'(str) : ポート番号に対するデバイス名
@@ -74,7 +74,7 @@ class USB:
     def _get_spresense_name(self, port):
         """
         Parameters:
-        port(list[int]): USB接続している機器のポート番号
+        port(int): USB接続している機器のポート番号
 
         Returns:
         SPRESENSEのデバイスファイルへのパス(str)
@@ -89,7 +89,7 @@ class USB:
         opencvでのカメラキャプチャ等で使用
         
         Parameters: 
-        port(list[int]): USB接続している機器のポート番号
+        port(int): USB接続している機器のポート番号
 
         Returns:
         retVal(int): USBカメラのデバイスID (0 or 1)
