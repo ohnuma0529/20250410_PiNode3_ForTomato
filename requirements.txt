@@ -6,3 +6,4 @@ timeout-decorator
 pyserial
 cobs
 Sphinx
+pigpio
