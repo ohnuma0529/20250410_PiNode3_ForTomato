@@ -16,6 +16,7 @@ Welcome to PiNode3's documentation!
    sensor
    usb
    util
+   modules
 
 Indices and tables
 ==================
