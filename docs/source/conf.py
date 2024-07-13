@@ -11,8 +11,8 @@ sys.path.insert(0, os.path.abspath('../../src'))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'PiNode3'
-copyright = '2024, Shimada Takuto'
-author = 'Shimada Takuto'
+copyright = '2024, Mineno Laboratory'
+author = 'Shimada Takuto, Kurita Kazuaki, Ebisawa Hajime'
 release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
@@ -22,8 +22,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
-    "myst_parser",
-    "sphinx.ext.githubpages"
+    "myst_parser"
 ]
 
 templates_path = ['_templates']
@@ -34,7 +33,7 @@ language = 'jp'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'bizstyle'
 html_static_path = ['_static']
 
 autodoc_default_options = {'private-members': True,   # プライベートメソッドも出力
