@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="jp" data-content_root="./">
@@ -6,30 +7,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>sensor module &#8212; PiNode3 1.0.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=61cd365c" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b849a4e9" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=658d757c" />
+    
     <script src="_static/documentation_options.js?v=eb881c4a"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="usb module" href="usb.html" />
     <link rel="prev" title="db module" href="db.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-
-  
-  
-
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
   </head><body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usb.html" title="usb module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="db.html" title="db module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">sensor module</a></li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <section id="module-sensor">
@@ -117,55 +133,59 @@
 </section>
 
 
+            <div class="clearer"></div>
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">PiNode3</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="camera.html">camera module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_collector.html">data_collector module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="db.html">db module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">sensor module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#sensor.MCP3204"><code class="docutils literal notranslate"><span class="pre">MCP3204</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sensor.Sensor"><code class="docutils literal notranslate"><span class="pre">Sensor</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sensor.SensorResult"><code class="docutils literal notranslate"><span class="pre">SensorResult</span></code></a></li>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">sensor module</a><ul>
+<li><a class="reference internal" href="#sensor.MCP3204"><code class="docutils literal notranslate"><span class="pre">MCP3204</span></code></a><ul>
+<li><a class="reference internal" href="#sensor.MCP3204.read"><code class="docutils literal notranslate"><span class="pre">MCP3204.read()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="usb.html">usb module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">util module</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="camera.html">camera module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_collector.html">data_collector module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="db.html">db module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">sensor module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usb.html">usb module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html">util module</a></li>
+<li><a class="reference internal" href="#sensor.Sensor"><code class="docutils literal notranslate"><span class="pre">Sensor</span></code></a><ul>
+<li><a class="reference internal" href="#sensor.Sensor._get_raw_data"><code class="docutils literal notranslate"><span class="pre">Sensor._get_raw_data()</span></code></a></li>
+<li><a class="reference internal" href="#sensor.Sensor._gpio_init"><code class="docutils literal notranslate"><span class="pre">Sensor._gpio_init()</span></code></a></li>
+<li><a class="reference internal" href="#sensor.Sensor._is_valid"><code class="docutils literal notranslate"><span class="pre">Sensor._is_valid()</span></code></a></li>
+<li><a class="reference internal" href="#sensor.Sensor.get"><code class="docutils literal notranslate"><span class="pre">Sensor.get()</span></code></a></li>
+<li><a class="reference internal" href="#sensor.Sensor.upload_csv"><code class="docutils literal notranslate"><span class="pre">Sensor.upload_csv()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sensor.SensorResult"><code class="docutils literal notranslate"><span class="pre">SensorResult</span></code></a><ul>
+<li><a class="reference internal" href="#sensor.SensorResult.EMPTY_STRING_ERROR"><code class="docutils literal notranslate"><span class="pre">SensorResult.EMPTY_STRING_ERROR</span></code></a></li>
+<li><a class="reference internal" href="#sensor.SensorResult.INF_ERROR"><code class="docutils literal notranslate"><span class="pre">SensorResult.INF_ERROR</span></code></a></li>
+<li><a class="reference internal" href="#sensor.SensorResult.MAX_VALUE_ERROR"><code class="docutils literal notranslate"><span class="pre">SensorResult.MAX_VALUE_ERROR</span></code></a></li>
+<li><a class="reference internal" href="#sensor.SensorResult.MIN_VALUE_ERROR"><code class="docutils literal notranslate"><span class="pre">SensorResult.MIN_VALUE_ERROR</span></code></a></li>
+<li><a class="reference internal" href="#sensor.SensorResult.NAN_ERROR"><code class="docutils literal notranslate"><span class="pre">SensorResult.NAN_ERROR</span></code></a></li>
+<li><a class="reference internal" href="#sensor.SensorResult.SUCCESS"><code class="docutils literal notranslate"><span class="pre">SensorResult.SUCCESS</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="db.html" title="previous chapter">db module</a></li>
-      <li>Next: <a href="usb.html" title="next chapter">usb module</a></li>
-  </ul></li>
-</ul>
-</div>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="db.html"
+                          title="previous chapter">db module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="usb.html"
+                          title="next chapter">usb module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/sensor.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -176,32 +196,32 @@
     </div>
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &#169;2024, Shimada Takuto.
-      
-      |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
-      
-      |
-      <a href="_sources/sensor.rst.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usb.html" title="usb module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="db.html" title="db module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">sensor module</a></li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Mineno Laboratory.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
   </body>
 </html>
