@@ -6,17 +6,18 @@
 Welcome to PiNode3's documentation!
 ===================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+* :doc:`Get Started </get-started/index>`
+   PiNode3の基礎とデータ収集までの流れを学びます。
 
-   camera
-   data_collector
-   db
-   sensor
-   usb
-   util
-   modules
+* :doc:`Software Reference </software-reference/index>`
+   PiNode3のソフトウェアリファレンスです。
+
+* :doc:`Hardware Reference </hardware-reference/index>`
+   PiNode3のハードウェアリファレンスです。
+
+* :doc:`Utilization </utilization/index>`
+   PiNode3の利用方法です。
+
 
 Indices and tables
 ==================
