@@ -14,7 +14,7 @@ import util
 
 class Camera:
     """
-    カメラ撮影を行うためのクラス:テスト
+    カメラ撮影を行うためのクラス
     """
     def __init__(self):
         self.config = util.get_pinode_config()
