@@ -1,7 +1,7 @@
 import json
 import subprocess
 import time
-import spidev
+# import spidev
 import os
 from enum import Enum
 from pathlib import Path
@@ -21,6 +21,9 @@ class SensorResult(Enum):
     MAX_VALUE_ERROR     = 5  # 最大値エラー
 
 class MCP3204:
+    """
+        aiueo
+    """
     def __init__(self, spi, vref=5.0):
         self.spi = spi
         self.vref = vref
@@ -35,6 +38,9 @@ class MCP3204:
         return volts
 
 class Sensor:
+    """
+    センサーの値を取得するクラス
+    """
     def __init__(self):
         read_sensor.init_pigpio()
         self.config = util.get_pinode_config()
