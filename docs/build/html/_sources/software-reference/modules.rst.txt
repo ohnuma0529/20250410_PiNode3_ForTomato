@@ -7,6 +7,7 @@ src
    camera
    data_collector
    db
+   read_sensor
    sensor
    usb
    util
