@@ -1,7 +1,7 @@
 import json
 import subprocess
 import time
-import spidev
+# import spidev
 import os
 from enum import Enum
 from pathlib import Path
