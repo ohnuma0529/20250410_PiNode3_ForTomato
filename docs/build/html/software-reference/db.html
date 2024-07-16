@@ -40,8 +40,48 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="db-module">
-<h1>db module<a class="headerlink" href="#db-module" title="Link to this heading">¶</a></h1>
+  <section id="module-db">
+<span id="db-module"></span><h1>db module<a class="headerlink" href="#module-db" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="db.InfluxDB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">InfluxDB</span></span><a class="headerlink" href="#db.InfluxDB" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>InfluxDBへのデータアップロードに使用</p>
+<p>Details:
+以下config.json - InfluxDB関連部</p>
+<dl class="simple">
+<dt>influxdb&quot;<span class="classifier">{</span></dt><dd><p>&quot;port&quot;          : 8086,
+&quot;username&quot;      : &quot;pinode&quot;,
+&quot;password&quot;      : &quot;pinode-pass&quot;,
+&quot;organization&quot;  : &quot;pinode&quot;,
+&quot;bucket&quot;        : &quot;pinode&quot;</p>
+</dd>
+</dl>
+<p>}</p>
+<p>port: 8086: influxdbのポート番号
+portを除く各種変数は運用前にconfig.jsonを書き換えておくこと</p>
+<dl class="simple">
+<dt>token: InfluxDBの認証キーが書かれているtxt. install.shで作成.</dt><dd><p>InfluxDBへのアップロード時に使用</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="db.InfluxDB.upload_dataframe">
+<span class="sig-name descname"><span class="pre">upload_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.InfluxDB.upload_dataframe" title="Link to this definition">¶</a></dt>
+<dd><p>データをInfluxDBへアップロードする際に使用</p>
+<p>Details:
+write_Options=SYNCRONOUS: データの書き込みを同期的に行う．データが完全に書き終わるまでプログラムの実行を停止．</p>
+<blockquote>
+<div><p>実行時間はかかるが書き込みを確実に終了させるために使用</p>
+</div></blockquote>
+<p>書き込み内容のパラメータ
+bucket : データを書き込むバケット名．データベースのようなもの
+org    : InfluxDBのオーガニゼーション名
+record : 書き込むデータ
+data_frame_measurement_name : InfluxDBにおけるデータカテゴリのようなもの.SQLでいうテーブル名</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
