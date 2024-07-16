@@ -4,10 +4,10 @@
 <html lang="jp" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>sensor module &#8212; PiNode3 1.0.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b849a4e9" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
     <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=658d757c" />
     
     <script src="../_static/documentation_options.js?v=eb881c4a"></script>
@@ -46,11 +46,46 @@
 <dt class="sig sig-object py" id="sensor.MCP3204">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sensor.</span></span><span class="sig-name descname"><span class="pre">MCP3204</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sensor.MCP3204" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>aiueo</p>
+<p>MPC3204 ADC(アナログデジタルコンバータ)を使用するためのクラス</p>
+<p>paramerters:
+spi: SPIインターフェースオブジェクト
+vref: 参照電圧(今回の場合は5.0V)</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sensor.MCP3204.read">
 <span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sensor.MCP3204.read" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>指定したチャンネルからアナログ値を読み取りデジタル値に変換後，電圧に変換して返す</p>
+<p>Parameter:
+ch: チャンネル番号 (0～3)
+Return:
+チャンネルの電圧値(ボルト単位),チャンネル番号が無効な場合-1</p>
+<p>Details:
+MCP3204の通信フォーマットではSPI通信を通じて3バイトのデータでの送信が行われる.</p>
+<p>xfer2([0x06, data2, 0x00])では通信フォーマットに従って以下の3バイトのデータを指定する
+1番目のバイト: '0x06' スタートビットとモードビット(今回はシングルエンドモード)</p>
+<blockquote>
+<div><p>スタートビット: MCP3204に対して通信の開始を示すビット
+モードビット: MCP3204がどのモードでデータを取得するかを示すビット.今回はシングルエンドモード</p>
+</div></blockquote>
+<dl class="simple">
+<dt>2番目のバイト: data2  チャネル番号</dt><dd><p>'0bCCCC0000'のようなフォーマットで指定する. CCCC部分にチャネル番号を指定
+CCCC部分をチャネル番号にするため (ch &lt;&lt; 6) &amp; 0xff を実行してchをシフト&amp;整形</p>
+</dd>
+<dt>3番目のバイト: '0x00' ダミーバイト</dt><dd><p>このバイトはMCP3204からの応答データを完全に受信するために必要である.
+今回個のバイトで送るデータはないが通信サイクルを成立させるために適当なダミーデータを指定</p>
+</dd>
+</dl>
+<p>通信によって返却された3バイトの値がretに格納される
+ret (list): ret[0]: 1番目のバイト: 最初の送信データに対するMCP3204からの応答. (一般的には無視される)</p>
+<blockquote>
+<div><p>ret[1]: 2番目のバイト: 下位4ビットにデータが含まれる
+ret[2]: 3番目のバイト: 8ビットすべてにデータが含まれる</p>
+</div></blockquote>
+<p>raw = ((ret[1] &amp; 0x0f) &lt;&lt; 8) + ret[2]ではret[1]とret[2]の意味を持つバイトを12ビットとして取り出す.</p>
+<dl class="simple">
+<dt>volts = raw * self.vref / 4096.0 :ADCが生成する12ビットのデジタル値がアナログ入力電圧にどのように対応するかを計算</dt><dd><p>4096(2^12)で割ることでデジタル値を電圧値にスケーリングして正確な電圧値を取得</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -58,7 +93,7 @@
 <dt class="sig sig-object py" id="sensor.Sensor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sensor.</span></span><span class="sig-name descname"><span class="pre">Sensor</span></span><a class="headerlink" href="#sensor.Sensor" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>センサーの値を取得するクラス</p>
+<p>センサからの情報取得を行う</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sensor.Sensor._get_raw_data">
 <span class="sig-name descname"><span class="pre">_get_raw_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sensor.Sensor._get_raw_data" title="Link to this definition">¶</a></dt>
@@ -77,7 +112,10 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="sensor.Sensor.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sensor.Sensor.get" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>各種センサデータを取得するためのメソッド
+センサごとに指定回数だけデータ取得を試みる(デフォルトではすべてのセンサで3回試行)</p>
+<p># TODO</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sensor.Sensor.upload_csv">
@@ -88,8 +126,16 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sensor.SensorResult">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sensor.</span></span><span class="sig-name descname"><span class="pre">SensorResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sensor.SensorResult" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sensor.</span></span><span class="sig-name descname"><span class="pre">SensorResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sensor.SensorResult" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>数字を定数として扱うためにconstantsを作成</p>
+<p>constants:
+SUCCESS             = 0  : 正常
+EMPTY_STRING_ERROR  = 1  : 空文字エラー
+NAN_ERROR           = 2  : nanエラー
+INF_ERROR           = 3  : infエラー
+MIN_VALUE_ERROR     = 4  : 最小値エラー
+MAX_VALUE_ERROR     = 5  : 最大値エラー</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sensor.SensorResult.EMPTY_STRING_ERROR">
 <span class="sig-name descname"><span class="pre">EMPTY_STRING_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#sensor.SensorResult.EMPTY_STRING_ERROR" title="Link to this definition">¶</a></dt>
