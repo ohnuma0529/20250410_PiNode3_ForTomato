@@ -35,11 +35,6 @@ pip install -r requirements.txt
 sudo mkdir -p /usr/local/bin/pinode3/python/
 sudo mv pinode3 /usr/local/bin/pinode3/python/
 
-### ドライバインストール
-# センサドライバの設定
-echo === Install Sensor Driver ===
-cd driver/sensor; make clean; make uninstall; make; sudo make install; make clean; cd ../../
-
 # USB判別用ドライバの設定
 echo === Install USB Identify Driver ===
 model=$(grep -m1 -o -w 'Raspberry Pi [0-9]* Model [ABCD]\|Raspberry Pi 3 Model B Plus' /proc/cpuinfo)

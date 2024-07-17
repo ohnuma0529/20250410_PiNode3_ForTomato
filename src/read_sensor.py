@@ -222,9 +222,12 @@ def sht25_read(pi):
     
     if rxrT > 0:
         nT = (rxdT[0] << 8) | (rxdT[1] & 0xFC)
+    else: 
+        nT = 0
+    
+    if rxrH > 0:
         nH = (rxdH[0] << 8) | (rxdH[1] & 0xFC)
     else:
-        nT = 0
         nH = 0
     
     # show_term("Ret: {0}, ".format(rxrH))
@@ -735,12 +738,12 @@ def get(sensor):
 
     main_init(pi)
 
-    ret = pi.serial_data_available(g_huart0)
-    if ret > 0:
-      rxd = pi.serial_read_byte(g_huart0)
-      if rxd == 0x03:
-        show_term("^C\n")
-        raise Exception("Serial read terminated: Received 0x03 indicating a termination signal.")
+    # ret = pi.serial_data_available(g_huart0)
+    # if ret > 0:
+    #   rxd = pi.serial_read_byte(g_huart0)
+    #   if rxd == 0x03:
+    #     show_term("^C\n")
+    #     raise Exception("Serial read terminated: Received 0x03 indicating a termination signal.")
 
     if sensor == "dsw":
         dsw = dsw_read(pi)
