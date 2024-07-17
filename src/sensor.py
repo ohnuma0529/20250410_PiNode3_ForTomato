@@ -134,6 +134,7 @@ class Sensor:
         センサデータを正常に取得できなかった場合は前回値を返却
         
         """
+        result = SensorResult.EMPTY_STRING_ERROR
         for _ in range(self.config['sensor']['max_retry_count'][sensor]):
             try:
                 data = read_sensor.get(sensor)
