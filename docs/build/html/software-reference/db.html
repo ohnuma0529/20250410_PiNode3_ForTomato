@@ -16,6 +16,8 @@
     <script src="../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src" href="modules.html" />
+    <link rel="prev" title="data_collector module" href="data_collector.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -30,7 +32,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="src"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="data_collector.html" title="data_collector module"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">ソフトウェアリファレンス</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">db module</a></li> 
       </ul>
     </div>  
@@ -46,38 +55,24 @@
 <dt class="sig sig-object py" id="db.InfluxDB">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">InfluxDB</span></span><a class="headerlink" href="#db.InfluxDB" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>InfluxDBへのデータアップロードに使用</p>
-<p>Details:
-以下config.json - InfluxDB関連部</p>
-<dl class="simple">
-<dt>influxdb&quot;<span class="classifier">{</span></dt><dd><p>&quot;port&quot;          : 8086,
-&quot;username&quot;      : &quot;pinode&quot;,
-&quot;password&quot;      : &quot;pinode-pass&quot;,
-&quot;organization&quot;  : &quot;pinode&quot;,
-&quot;bucket&quot;        : &quot;pinode&quot;</p>
-</dd>
-</dl>
-<p>}</p>
-<p>port: 8086: influxdbのポート番号
-portを除く各種変数は運用前にconfig.jsonを書き換えておくこと</p>
-<dl class="simple">
-<dt>token: InfluxDBの認証キーが書かれているtxt. install.shで作成.</dt><dd><p>InfluxDBへのアップロード時に使用</p>
-</dd>
-</dl>
+<p>InfluxDBへのデータアップロードのためのクラス</p>
+<p class="rubric">Notes</p>
+<p>port: 8086: influxdbのポート番号</p>
+<p>portを除く各種変数は運用前にconfig.jsonを書き換えておくこと</p>
+<p>token: InfluxDBの認証キーが書かれているtxt. install.shで作成. InfluxDBへのアップロード時に使用</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="db.InfluxDB.upload_dataframe">
 <span class="sig-name descname"><span class="pre">upload_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.InfluxDB.upload_dataframe" title="Link to this definition">¶</a></dt>
-<dd><p>データをInfluxDBへアップロードする際に使用</p>
-<p>Details:
-write_Options=SYNCRONOUS: データの書き込みを同期的に行う．データが完全に書き終わるまでプログラムの実行を停止．</p>
-<blockquote>
-<div><p>実行時間はかかるが書き込みを確実に終了させるために使用</p>
-</div></blockquote>
-<p>書き込み内容のパラメータ
-bucket : データを書き込むバケット名．データベースのようなもの
-org    : InfluxDBのオーガニゼーション名
-record : 書き込むデータ
-data_frame_measurement_name : InfluxDBにおけるデータカテゴリのようなもの.SQLでいうテーブル名</p>
+<dd><p>データをInfluxDBへアップロードする際に使用
+.. rubric:: Notes</p>
+<p>write_Options=SYNCRONOUS: データの書き込みを同期的に行う．データが完全に書き終わるまでプログラムの実行を停止．</p>
+<dl>
+<dt>書き込み内容のパラメータ:</dt><dd><p>bucket : データを書き込むバケット名．データベースのようなもの</p>
+<p>org    : InfluxDBのオーガニゼーション名</p>
+<p>record : 書き込むデータ</p>
+<p>data_frame_measurement_name : InfluxDBにおけるデータカテゴリのようなもの.SQLでいうテーブル名</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -91,6 +86,29 @@ data_frame_measurement_name : InfluxDBにおけるデータカテゴリのよう
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">db module</a><ul>
+<li><a class="reference internal" href="#db.InfluxDB"><code class="docutils literal notranslate"><span class="pre">InfluxDB</span></code></a><ul>
+<li><a class="reference internal" href="#db.InfluxDB.upload_dataframe"><code class="docutils literal notranslate"><span class="pre">InfluxDB.upload_dataframe()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="data_collector.html"
+                          title="previous chapter">data_collector module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="modules.html"
+                          title="next chapter">src</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -121,7 +139,14 @@ data_frame_measurement_name : InfluxDBにおけるデータカテゴリのよう
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="src"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="data_collector.html" title="data_collector module"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >ソフトウェアリファレンス</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">db module</a></li> 
       </ul>
     </div>
