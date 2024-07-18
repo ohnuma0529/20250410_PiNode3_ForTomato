@@ -21,14 +21,15 @@ class Camera:
 
     def save_images(self):
         """
-        デバイスに応じたカメラ撮影を行うメソッド
-        ポート番号,PinodeのデバイスID,時刻等をファイル名としてSPRESENSEとUSBカメラで撮影した画像を保存
-        Details:
-        devices: (port,identify,name)
+        デバイスに応じたカメラ撮影を行うメソッド.ポート番号,PinodeのデバイスID,時刻をファイル名としてSPRESENSEとUSBカメラで撮影した画像を保存する
+        
+        Attributes:
+            devices: (port,identify,name)
             port(int): USB接続している機器のポート番号
             identify(str): ポート番号に対するデバイス名(SPRESENSE or USB Camera)
             name (int): (SPRESENSEの場合)接続ポート番号ごとのデバイスファイルパス
-                 (str): (USB Cameraの場合)デバイスID
+                 (str): (USB Cameraの場合)デバイスID 
+                          
         """
         devices = USB().get()
         for port, type, name in devices:
@@ -41,22 +42,26 @@ class Camera:
 
 class SPRESENSE:
     """
-        SPRESENSEに関する設定値,メソッドをまとめたクラス
-
-        Constants:
-        BAUD_RATE(int): SPRESENSE Main Boardとの通信のためのボーレート
-        BUFF_SIZE(int): 一回の通信で送られてくるメインデータのデータサイズ（パケットサイズ）
-        TYPE_INFO(int): SPRESENSEから送られてきたパケットのタイプ(情報データ)
-        TYPE_IMAGE(int): SPRESENSEから送られてきたパケットのタイプ(画像データ)
-        TYPE_FINISH(int): SPRESENSEから送られてきたパケットのタイプ(送信終了データ)
-        TYPE_ERROR(int): SPRESENSEから送られてきたパケットのタイプ(エラーデータ)
-
-        Parameters:
-        port_num(str): 接続ポート番号ごとのデバイスファイルパス
+    SPRESENSEに関する設定値,メソッドをまとめたクラス
         
+    Args:
+        port_num(str): 接続ポート番号ごとのデバイスファイルパス
+            
+    Notes:
+        BAUD_RATE(int): SPRESENSE Main Boardとの通信のためのボーレート
+        
+        BUFF_SIZE(int): 一回の通信で送られてくるメインデータのデータサイズ（パケットサイズ）
+        
+        TYPE_INFO(int): SPRESENSEから送られてきたパケットのタイプ(情報データ)
+        
+        TYPE_IMAGE(int): SPRESENSEから送られてきたパケットのタイプ(画像データ)
+        
+        TYPE_FINISH(int): SPRESENSEから送られてきたパケットのタイプ(送信終了データ)
+        
+        TYPE_ERROR(int): SPRESENSEから送られてきたパケットのタイプ(エラーデータ)
     """
-    BAUD_RATE   = 115200  # ボーレート
-    BUFF_SIZE   = 100  # 1回の通信で送られてくるデータサイズ
+    BAUD_RATE   = 115200  
+    BUFF_SIZE   = 100  
     TYPE_INFO   = 0
     TYPE_IMAGE  = 1
     TYPE_FINISH = 2
@@ -70,17 +75,19 @@ class SPRESENSE:
         """
         SPRESENSEから受け取ったバイナリ画像を保存する
         
-        Parameters:
-        file_name(str): 保存するファイル名
+        Args:
+            file_name (str): 保存するファイル名
         
-        Returns:
-        True(bool): データ保存が正常に終了
-        False(bool): データ保存に失敗
+        Returns:    
+            True (bool): データ保存が正常に終了
+            False (bool): データ保存に失敗
 
-        Details:
-        3回実行を行いエラーが発生した場合は終了する
-        シリアル通信の接続に時間がかかるため2秒間sleep
-        エラーが発生した場合再起動
+        Notes:
+            ・3回実行を行いエラーが発生した場合は終了する
+            
+            ・シリアル通信の接続に時間がかかるため2秒間sleep
+            
+            ・エラーが発生した場合再起動
 
         """
         local_file_path = str(Path(self.config['camera']['image_dir']['local']) / Path(file_name))
@@ -89,7 +96,7 @@ class SPRESENSE:
         for i in range(3):
             try:
                 with serial.Serial(self.port_num, self.BAUD_RATE, timeout = 3) as ser:
-                    time.sleep(2)     # SPRESENSE側との接続のための待ち時間
+                    time.sleep(2)
                     img = self._get_image_data(ser)
                     print(f"save image : {local_file_path}")
                     with open(local_file_path, "wb") as f:
@@ -102,7 +109,7 @@ class SPRESENSE:
         return False
 
     def _reboot(self):
-        """
+        """Function
         USB機器の電源供給を一度切り再び入れる
         """
         subprocess.call("sudo sh -c \"echo -n \"1-1\" > /sys/bus/usb/drivers/usb/unbind\"", shell=True)
@@ -111,39 +118,42 @@ class SPRESENSE:
         time.sleep(5)
 
     def _get_packet(self, ser):
-        """
+        """Function
         接続しているシリアルポートから1パケット分データの受信を行う
-        Parameters:
-        ser(serial.Serial):
+        
+        Args:
+            ser (serial.Serial):
 
         Returns:
-        [decorded[0],index,decorded[5:]] :list(int,int,bytearray)
+            [decoded[0],index,decoded[5:]] :list (int,int,bytearray)
+            
+        Attributes:
+            index (int): decodedは最初の4桁がインデックス番号.4桁の数値をint型に変換し画像インデックスとして使用
+            decoded[0] (int): SPRESENSEから送られてきたパケットのタイプ(画像データ)
+            decoded[5:](bytearray): 画像データ本体
 
-        Details:
-        decorded[0]:
-            SPRESENSEから送られてきたパケットのタイプ(画像データ)
-        index(int):
-            decodeは最初の4桁がインデックス番号
-            4桁の数値をint型に変換し画像インデックスとして使用
-        decoded[5:](bytearray):
-            画像データ本体
+        Notes:
+            1バイトずつシリアル通信で画像を取得しパケット終了文字x00が来るまでデータを受け取る. その後,cobs.decodeで終了文字列を画像に対応するものに戻す
 
-        フロー:
-        1バイトずつシリアル通信で画像を取得
-        パケット終了文字x00が来るまでデータを受け取る
-        cobs.decodeで終了文字列を画像に対応するものに戻す
+            [参考]シリアル通信で受け取る正常な画像データは以下のような構造を持つ
+                
+                decoded[0]:TYPE_IMAGE(int: 1)
 
-        [参考]
-        シリアル通信で受け取る正常な画像データは以下のような構造を持つ
-        decoded[0]:TYPE_IMAGE(int: 1)
-        decoded[1]:index 4桁目
-        decoded[2]:index 3桁目
-        decoded[3]:index 2桁目
-        decoded[4]:index 1桁目
-        decoded[5]:画像データ内容1
-        decoded[6]:画像データ内容2
-        ...
-        decoded[X]:画像データ内容X
+                decoded[1]:index 4桁目
+            
+                decoded[2]:index 3桁目
+
+                decoded[3]:index 2桁目
+            
+                decoded[4]:index 1桁目
+            
+                decoded[5]:画像データ内容1
+            
+                decoded[6]:画像データ内容2
+                
+                ...
+                
+                decoded[X]:画像データ内容X
     
         """
         try:
@@ -162,12 +172,13 @@ class SPRESENSE:
     def _check_packet(self, data):
         """
         パケットデータのサイズが正しいかどうかの確認を行う
-        Parameters:
-        data(bytearray):受信した1パケット分のバイナリデータ
+        
+        Args:
+            data (bytearray):受信した1パケット分のバイナリデータ
 
         Returns:
-        True(bool):データの取得が成功
-        False(bool):データの取得に失敗
+            True (bool):データの取得が成功
+            False (bool):データの取得に失敗
         """
         if len(data) != self.BUFF_SIZE:
             return False
@@ -176,32 +187,37 @@ class SPRESENSE:
     def _send_request_image(self, ser):
         """
         画像の送信を要求するパケットをSPRESENSEに送信する
-        Parameters
-        ser(serial.Serial): 接続しているシリアル
-        Details:
-        ”S” がSPRESENSEに送信されると画像撮影が行われる
+        
+        Args:
+            ser (serial.Serial): 接続しているシリアル
+        
+        Notes:
+            ”S” がSPRESENSEに送信されると画像撮影が行われる
         """
         ser.write(str.encode('S\n'))
 
     def _send_complete_image(self, ser):
         """
         画像データをすべて受信したことを伝えるパケットをSPRESENSEに送信する
-        Parameters
-        ser(serial.Serial): 接続しているシリアル
-        Details:
-        SPRESENSEの待機状態を解除
+        
+        Args:
+            ser (serial.Serial): 接続しているシリアル
+        
+        Notes:
+            SPRESENSEの待機状態を解除
         """
         ser.write(str.encode('E\n'))
 
     def _send_request_resend(self, ser, index):
         """
         画像の再送を要求するパケットをSPRESENSEに送信する
-        Parameters
-        ser(serial.Serial): 接続しているシリアル
-        index(int): 再送するインデックス番号
-        Details:
-        "R"+index番号をSPRESENSEに送信するとインデックス番号に対応するデータを
-        再送してくれる
+        
+        Args:
+            ser (serial.Serial): 接続しているシリアル
+            index (int): 再送するインデックス番号
+        
+        Notes:
+            "R"+index番号をSPRESENSEに送信するとインデックス番号に対応するデータを再送してくれる
         
         """
         ser.write(str.encode(f'R{index}\n'))
@@ -209,32 +225,36 @@ class SPRESENSE:
     @timeout_decorator.timeout(50, use_signals=False)
     def _get_image_data(self, ser):
         """
-        SPRESENSEから画像データを受け取り,バイナリの画像データを作成する
-        通信時間が50秒を超えた場合タイムアウトする
+        SPRESENSEから画像データを受け取り,バイナリの画像データを作成する.通信時間が50秒を超えた場合タイムアウト
 
-        Parameters:
-        ser(serial.Serial): 接続しているシリアル
+        Args:
+            ser (serial.Serial): 接続しているシリアル
 
         Returns:
-        img(bytearray): すべての画像データ
-
-        Details:
-        img(bytearray): 送信されたバイナリ画像データ.  size = 最大index値 * BUFF_SIZE(100)
-        resend_index_list(list[int]): 再送してほしいインデックスのリスト
-        finish_flag(list[bool]): データ受信完了時にSPRESENSEに終了信号を送信するために使用
-        send_flg(list[bool]): 正常に受信できたかを管理するリスト,すべてFalseとして初期化され,正常受信でTrueに変更
+            img (bytearray): すべての画像データ
+            
+        Attributes:
+            img (bytearray): 送信されたバイナリ画像データ.  size = 最大index値 * BUFF_SIZE(100)
+            resend_index_list (list[int]): 再送してほしいインデックスのリスト
+            finish_flag (list[bool]): データ受信完了時にSPRESENSEに終了信号を送信するために使用
+            send_flg (list[bool]): 正常に受信できたかを管理するリスト,すべてFalseとして初期化され,正常受信でTrueに変更
         
-        各信号とその信号を受け取った際の実施事項
-        TYPE_INFO: 画像が撮影時に一番最初に送られる信号
-            この信号を受け取った後,以下の要素を初期化: img,max_index,sendflg
-        TYPE_IMAGE: データが画像であった場合に送られる信号
-            正常な受信が行われたため,imgにデータを追加し,send_flgを書き換える
-        TYPE_FINISH: 最後の画像データの場合に送られる信号
-            正常な受信が行われたため,imgにデータを追加し,finish_flgを書き換える
-        TYPE_ERROR: データ受信に問題があった場合に送られる信号
+        Notes:
+            各信号とその信号を受け取った際の実施事項
+                
+                TYPE_INFO: 画像が撮影時に一番最初に送られる信号
+                    この信号を受け取った後,以下の要素を初期化: img,max_index,sendflg
+                
+                TYPE_IMAGE: データが画像であった場合に送られる信号
+                    正常な受信が行われたため,imgにデータを追加し,send_flgを書き換える
+                
+                TYPE_FINISH: 最後の画像データの場合に送られる信号
+                    正常な受信が行われたため,imgにデータを追加し,finish_flgを書き換える
+                
+                TYPE_ERROR: データ受信に問題があった場合に送られる信号
         
-        finish_flagがTrueの場合: send_flagがFalseであるもの,resend_index_listに含まれているものに対して再送命令
-        すべてのデータが完全に送られるまでWhile分のループを実行
+            finish_flagがTrueの場合: send_flagがFalseであるもの,resend_index_listに含まれているものに対して再送命令. 
+            すべてのデータが完全に送られるまでWhile分のループを実行
         """
         img = b''
         resend_index_list = []
@@ -246,7 +266,6 @@ class SPRESENSE:
         while True:
             code, index, data = self._get_packet(ser)
 
-            # データ取得
             if code == self.TYPE_INFO:
                 img = bytearray(index * self.BUFF_SIZE)
                 max_index = index
@@ -265,7 +284,6 @@ class SPRESENSE:
             elif code == self.TYPE_ERROR:
                 print('cant get data')
 
-            # 終了チェック
             if finish_flag:
                 if False in send_flg:
                     print("resend", send_flg.index(False))
@@ -281,8 +299,8 @@ class UsbCamera:
     """
     USBカメラで撮影した写真保存のためのクラス
     
-    Parameters:
-    device_name(int): デバイスID(カメラインデックス)
+    Args:
+        device_name (int): デバイスID(カメラインデックス)
     """
     def __init__(self, device_name):
         
@@ -292,19 +310,19 @@ class UsbCamera:
     @timeout_decorator.timeout(20)
     def save(self, file_name):
         """
-        USBカメラで撮影した写真の保存
-        20秒のタイムアウト設定
+        USBカメラで撮影した写真の保存. 20秒のタイムアウト設定
 
-        Parameters:
-        filename(str): 保存ファイル名
+        Args:
+            filename (str): 保存ファイル名
         
         Returns:
-        True or False(bool):
+            True (bool)
+            False (bool)
 
-        Details:
-        カメラ読み込みを50回実行
-            (理由)撮影が始まってすぐの段階ではカメラ補正がうまく働かず適切な写真を取得できない．
-                  回数を繰り返すことで適切な画像取得が可能. (Timeoutも試したがうまく動作せず)
+        Notes:
+            カメラ読み込みを50回実行
+                (理由)撮影が始まってすぐの段階ではカメラ補正がうまく働かず適切な写真を取得できない.
+                回数を繰り返すことで適切な画像取得が可能. (Timeoutも試したがうまく動作せず)
         """
         cap = cv2.VideoCapture(self.device_name, cv2.CAP_V4L)
         for _ in range(50):

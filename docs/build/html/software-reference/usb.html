@@ -16,6 +16,8 @@
     <script src="../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="util module" href="util.html" />
+    <link rel="prev" title="sensor module" href="sensor.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -30,7 +32,15 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="util.html" title="util module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sensor.html" title="sensor module"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >ソフトウェアリファレンス</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" accesskey="U">src</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">usb module</a></li> 
       </ul>
     </div>  
@@ -46,85 +56,147 @@
 <dt class="sig sig-object py" id="usb.USB">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">usb.</span></span><span class="sig-name descname"><span class="pre">USB</span></span><a class="headerlink" href="#usb.USB" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>USBからの情報取得
-camera.pyから呼び出される
-camera.pyから呼び出される</p>
+<p>USBからの情報取得をするためのクラス</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="usb.USB._get_connect_ports">
 <span class="sig-name descname"><span class="pre">_get_connect_ports</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#usb.USB._get_connect_ports" title="Link to this definition">¶</a></dt>
 <dd><p>接続されているデバイスのUSBポート番号を配列として取得</p>
-<p>Returns:
-usb_ports(list[int]): USB接続している機器のポート番号</p>
-<p>Details:
-配列内の各値は以下の意味を持つ．
-# 1 -&gt; 左上
-# 2 -&gt; 左下
-# 3 -&gt; 右上
-# 4 -&gt; 右下</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>usb_ports</strong> (<em>list[int]</em>) -- USB接続している機器のポート番号</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>配列内の各値は以下の意味を持つ．</p>
+<p># 1 -&gt; USB端子 左上 に接続</p>
+<p># 2 -&gt; USB端子 左下 に接続</p>
+<p># 3 -&gt; USB端子 右上 に接続</p>
+<p># 4 -&gt; USB端子 右下 に接続</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="usb.USB._get_spresense_name">
 <span class="sig-name descname"><span class="pre">_get_spresense_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#usb.USB._get_spresense_name" title="Link to this definition">¶</a></dt>
-<dd><p>Parameters:
-port(int): USB接続している機器のポート番号</p>
-<p>Returns:
-SPRESENSEのデバイスファイルへのパス(str)
-/dev/ttyUSB_1 - /dev/ttyUSB_4 のどれか</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>port</strong> (<em>int</em>) -- USB接続している機器のポート番号</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>SPRESENSEのデバイスファイルへのパス</strong> (<em>str</em>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="usb.USB._get_usb_camera_name">
 <span class="sig-name descname"><span class="pre">_get_usb_camera_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#usb.USB._get_usb_camera_name" title="Link to this definition">¶</a></dt>
-<dd><p>USBカメラのデバイスIDを取得
-opencvでのカメラキャプチャ等で使用</p>
-<p>Parameters:
-port(int): USB接続している機器のポート番号</p>
-<p>Returns:
-retVal(int): USBカメラのデバイスID (0 or 1)</p>
-<p>Details:
-model(str): 接続機器名(Raspberry pi 3 Model B Plus, RasPberry pi 4 Model B等)</p>
-<blockquote>
-<div><p>RasPi3とRasPi4では作成されるシンボリック名が異なるため条件文で検索文字を指定
-接続ポートによっても名称が異なる．</p>
-</div></blockquote>
-<dl class="simple">
-<dt>devices(list[str]): 接続デバイスのシンボリックリンクのパス</dt><dd><p>シンボリックリンク参照先のパスの最後の値を取得
-シンボリックリンク('/dev/v4l/by-path/?????') -&gt; 機器(path/???1) の最後の値がデバイスIDである</p>
+<dd><p>USBカメラのデバイスIDを取得.opencvでのカメラキャプチャ等で使用</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>port</strong> (<em>int</em>) -- USB接続している機器のポート番号</p>
 </dd>
-<dt>retval(int):</dt><dd><p>USB接続するとシンボリックリングが2個生成される.取得する名前を小さい数字にするために
-if retVal % 2 == 0: の条件文を追加</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>retVal</strong> (<em>int</em>) -- USBカメラのデバイスID (0 or 1)</p>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usb.USB.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#usb.USB.model" title="Link to this definition">¶</a></dt>
+<dd><p>接続機器名(Raspberry pi 3 Model B Plus, RasPberry pi 4 Model B等) RasPi3とRasPi4では作成されるシンボリックリンク名が異なるため条件文で検索文字を指定. 接続ポートによっても名称が異なる．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usb.USB.devices">
+<span class="sig-name descname"><span class="pre">devices</span></span><a class="headerlink" href="#usb.USB.devices" title="Link to this definition">¶</a></dt>
+<dd><p>接続デバイスのシンボリックリンクのパス. シンボリックリンク('/dev/v4l/by-path/?????') -&gt; 機器(path/???1)  に位置する機器の最後の値がデバイスIDとなる</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usb.USB.retval">
+<span class="sig-name descname"><span class="pre">retval</span></span><a class="headerlink" href="#usb.USB.retval" title="Link to this definition">¶</a></dt>
+<dd><p>USB接続するとシンボリックリングが2個生成される.2個のうち名前を小さいほうの数字のシンボリックリンク</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="usb.USB._identify_usb_device">
 <span class="sig-name descname"><span class="pre">_identify_usb_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#usb.USB._identify_usb_device" title="Link to this definition">¶</a></dt>
 <dd><p>接続されているUSB機器のデバイス名を取得</p>
-<p>Parameters:
-port(int): USB接続している機器のポート番号</p>
-<p>Returns:
-'SPRESENSE'(str) or 'USB Camera'(str) : ポート番号に対するデバイス名</p>
-<p>Details:
-'/dev/<a href="#id1"><span class="problematic" id="id2">ttyUSB_</span></a>' + USBポート番号 で指定されたパスにシンボリックリンクが存在する
-シンボリックリンクの参照物のパス内にttyUSBが含まれていればSPRESENSE,入っていなければUSB Cameraの文字列を返す</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>port</strong> (<em>int</em>) -- USB接続している機器のポート番号</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>'SPRESENSE'</strong> (<em>str</em>) -- ポート番号に対するデバイス名</p></li>
+<li><p><strong>'USB Camera'</strong> (<em>str</em>) -- ポート番号に対するデバイス名</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>'/dev/<a href="#id1"><span class="problematic" id="id2">ttyUSB_</span></a>' + USBポート番号 で指定されたパスにシンボリックリンクが存在する</p>
+<p>シンボリックリンクの参照物のパス内にttyUSBが含まれていればSPRESENSE,入っていなければUSB Cameraの文字列を返す</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="usb.USB.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#usb.USB.get" title="Link to this definition">¶</a></dt>
-<dd><p>USB接続されている機器の情報をリストとして一括で取得するメソッド
-USB機器が複数接続されている場合は各要素は配列として取得される</p>
-<p>Returns:
-[(self.ports,self.identifys,self.names)] list(int,str,str): ポート番号順に整列</p>
-<p>Details:
-self.ports(list[int]) : USB接続している機器のポート番号
-self.identifys(list(str)) : ポート番号に対するデバイス名(SPRESENSE or USB Camera)
-self.names :(list[str]) (SPRESENSEの場合)接続ポート番号ごとのデバイスファイルパス</p>
-<blockquote>
-<div><p>(list(int)) (USB Cameraの場合)デバイスID</p>
-</div></blockquote>
+<dd><p>USB接続されている機器の情報をリストとして一括で取得するメソッド.USB機器が複数接続されている場合は各要素は配列として取得される</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>[</strong> (<em>self.ports,self.identifys,self.names)] list (int,str,str</em>) -- ポート番号順に整列</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usb.USB.self.ports">
+<span class="sig-prename descclassname"><span class="pre">self.</span></span><span class="sig-name descname"><span class="pre">ports</span></span><a class="headerlink" href="#usb.USB.self.ports" title="Link to this definition">¶</a></dt>
+<dd><p>USB接続している機器のポート番号</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usb.USB.self.identifys">
+<span class="sig-prename descclassname"><span class="pre">self.</span></span><span class="sig-name descname"><span class="pre">identifys</span></span><a class="headerlink" href="#usb.USB.self.identifys" title="Link to this definition">¶</a></dt>
+<dd><p>ポート番号に対するデバイス名(SPRESENSE or USB Camera)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usb.USB.self.names">
+<span class="sig-prename descclassname"><span class="pre">self.</span></span><span class="sig-name descname"><span class="pre">names</span></span><a class="headerlink" href="#usb.USB.self.names" title="Link to this definition">¶</a></dt>
+<dd><p>(SPRESENSEの場合)接続ポート番号ごとのデバイスファイルパス
+(list(int)): (USB Cameraの場合)デバイスID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </dd></dl>
@@ -146,14 +218,30 @@ self.names :(list[str]) (SPRESENSEの場合)接続ポート番号ごとのデバ
 <li><a class="reference internal" href="#usb.USB._get_connect_ports"><code class="docutils literal notranslate"><span class="pre">USB._get_connect_ports()</span></code></a></li>
 <li><a class="reference internal" href="#usb.USB._get_spresense_name"><code class="docutils literal notranslate"><span class="pre">USB._get_spresense_name()</span></code></a></li>
 <li><a class="reference internal" href="#usb.USB._get_usb_camera_name"><code class="docutils literal notranslate"><span class="pre">USB._get_usb_camera_name()</span></code></a></li>
+<li><a class="reference internal" href="#usb.USB.model"><code class="docutils literal notranslate"><span class="pre">USB.model</span></code></a></li>
+<li><a class="reference internal" href="#usb.USB.devices"><code class="docutils literal notranslate"><span class="pre">USB.devices</span></code></a></li>
+<li><a class="reference internal" href="#usb.USB.retval"><code class="docutils literal notranslate"><span class="pre">USB.retval</span></code></a></li>
 <li><a class="reference internal" href="#usb.USB._identify_usb_device"><code class="docutils literal notranslate"><span class="pre">USB._identify_usb_device()</span></code></a></li>
 <li><a class="reference internal" href="#usb.USB.get"><code class="docutils literal notranslate"><span class="pre">USB.get()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#usb.USB.self.ports"><code class="docutils literal notranslate"><span class="pre">USB.self.ports</span></code></a></li>
+<li><a class="reference internal" href="#usb.USB.self.identifys"><code class="docutils literal notranslate"><span class="pre">USB.self.identifys</span></code></a></li>
+<li><a class="reference internal" href="#usb.USB.self.names"><code class="docutils literal notranslate"><span class="pre">USB.self.names</span></code></a></li>
 </ul>
 </li>
 </ul>
 
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="sensor.html"
+                          title="previous chapter">sensor module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="util.html"
+                          title="next chapter">util module</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -185,7 +273,15 @@ self.names :(list[str]) (SPRESENSEの場合)接続ポート番号ごとのデバ
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="util.html" title="util module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sensor.html" title="sensor module"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >ソフトウェアリファレンス</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" >src</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">usb module</a></li> 
       </ul>
     </div>
