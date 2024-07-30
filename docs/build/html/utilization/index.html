@@ -4,10 +4,10 @@
 <html lang="jp" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>PiNode3利用方法 &#8212; PiNode3 1.0.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b849a4e9" />
     <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=658d757c" />
     
     <script src="../_static/documentation_options.js?v=eb881c4a"></script>
@@ -16,7 +16,8 @@
     <script src="../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="ハードウェア設計資料" href="../hardware-reference/hardware-design.html" />
+    <link rel="next" title="InfluxDB データ取得のガイド" href="data_collect_guide.html" />
+    <link rel="prev" title="利用センサ資料" href="../hardware-reference/sensor.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -32,7 +33,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../hardware-reference/hardware-design.html" title="ハードウェア設計資料"
+          <a href="data_collect_guide.html" title="InfluxDB データ取得のガイド"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../hardware-reference/sensor.html" title="利用センサ資料"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">PiNode3利用方法</a></li> 
@@ -46,6 +50,32 @@
             
   <section id="pinode3">
 <h1>PiNode3利用方法<a class="headerlink" href="#pinode3" title="Link to this heading">¶</a></h1>
+<p>本ファイルはデータ利用方法のGitリポジトリからの流用となります。
+最新情報は以下のリポジトリを参照してください。</p>
+<p><a class="reference external" href="https://github.com/MinenoLab/PiNode3-Data-Utilization-Guide">PiNode3データ利用ガイド</a></p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data_collect_guide.html">InfluxDB データ取得のガイド</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#id1">必要なツールのインストール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#id2">環境変数の設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#bash">Bashスクリプトを使用したデータ取得</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#id3">スクリプトの実行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#influxdb-gui">InfluxDB GUIを使用したデータ取得</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#python">Pythonを使用したデータ取得</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#id4">必要なライブラリのインストール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#id5">Pythonスクリプト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#id6">スクリプトの実行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#id7">InfluxDB データ取得結果</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_collect_guide.html#id8">各フィールドの説明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data_watch_guide.html">InfluxDB データ監視のガイド</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_watch_guide.html#pinode-dashboard">PiNode DashBoard設定方法</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </section>
 
 
@@ -57,8 +87,13 @@
         <div class="sphinxsidebarwrapper">
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="../hardware-reference/hardware-design.html"
-                          title="previous chapter">ハードウェア設計資料</a></p>
+    <p class="topless"><a href="../hardware-reference/sensor.html"
+                          title="previous chapter">利用センサ資料</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="data_collect_guide.html"
+                          title="next chapter">InfluxDB データ取得のガイド</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -91,7 +126,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../hardware-reference/hardware-design.html" title="ハードウェア設計資料"
+          <a href="data_collect_guide.html" title="InfluxDB データ取得のガイド"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../hardware-reference/sensor.html" title="利用センサ資料"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">PiNode3利用方法</a></li> 

@@ -4,10 +4,10 @@
 <html lang="jp" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>ソフトウェアリファレンス &#8212; PiNode3 1.0.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b849a4e9" />
     <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=658d757c" />
     
     <script src="../_static/documentation_options.js?v=eb881c4a"></script>
@@ -16,8 +16,8 @@
     <script src="../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="camera module" href="camera.html" />
-    <link rel="prev" title="概要説明とセットアップ" href="../get-started/index.html" />
+    <link rel="next" title="PiNode3 software configuration" href="configuration.html" />
+    <link rel="prev" title="PiNode3 スタートガイド" href="../get-started/index.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -33,10 +33,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="camera.html" title="camera module"
+          <a href="configuration.html" title="PiNode3 software configuration"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../get-started/index.html" title="概要説明とセットアップ"
+          <a href="../get-started/index.html" title="PiNode3 スタートガイド"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ソフトウェアリファレンス</a></li> 
@@ -53,14 +53,69 @@
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="camera.html">camera module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_collector.html">data_collector module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="db.html">db module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">src</a></li>
-<li class="toctree-l1"><a class="reference internal" href="read_sensor.html">read_sensor module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sensor.html">sensor module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usb.html">usb module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">util module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">PiNode3 software configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#id">デバイスID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#influxdb">InfluxDBの設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#id1">センサーの設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#id2">カメラの設定</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="directory_structure.html">PiNode3 software directory structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="directory_structure.html#github">GitHubリポジトリのディレクトリ構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directory_structure.html#id1">インストール後の各種ソフトウェアディレクトリ構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directory_structure.html#id2">各種データのディレクトリ構造</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module/camera.html">camera module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module/camera.html#camera.Camera"><code class="docutils literal notranslate"><span class="pre">Camera</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/camera.html#camera.SPRESENSE"><code class="docutils literal notranslate"><span class="pre">SPRESENSE</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/camera.html#camera.UsbCamera"><code class="docutils literal notranslate"><span class="pre">UsbCamera</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module/db.html">db module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module/db.html#db.InfluxDB"><code class="docutils literal notranslate"><span class="pre">InfluxDB</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module/read_sensor.html">read_sensor module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.dsw_read"><code class="docutils literal notranslate"><span class="pre">dsw_read()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.init_pigpio"><code class="docutils literal notranslate"><span class="pre">init_pigpio()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.pi"><code class="docutils literal notranslate"><span class="pre">pi</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.led_show"><code class="docutils literal notranslate"><span class="pre">led_show()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.main_init"><code class="docutils literal notranslate"><span class="pre">main_init()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.mcp3204_read"><code class="docutils literal notranslate"><span class="pre">mcp3204_read()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.mcp3204ex_read"><code class="docutils literal notranslate"><span class="pre">mcp3204ex_read()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.s1133_ext"><code class="docutils literal notranslate"><span class="pre">s1133_ext()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.ADDR_I2C3"><code class="docutils literal notranslate"><span class="pre">ADDR_I2C3</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.s1133_int"><code class="docutils literal notranslate"><span class="pre">s1133_int()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.ADDR_I2C2"><code class="docutils literal notranslate"><span class="pre">ADDR_I2C2</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.show_term"><code class="docutils literal notranslate"><span class="pre">show_term()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.show_uart"><code class="docutils literal notranslate"><span class="pre">show_uart()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.sht25_read"><code class="docutils literal notranslate"><span class="pre">sht25_read()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.ADDR_I2C1"><code class="docutils literal notranslate"><span class="pre">ADDR_I2C1</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.sht85_read"><code class="docutils literal notranslate"><span class="pre">sht85_read()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.ADDR_I2C4"><code class="docutils literal notranslate"><span class="pre">ADDR_I2C4</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.signal_handler"><code class="docutils literal notranslate"><span class="pre">signal_handler()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/read_sensor.html#read_sensor.uart_write"><code class="docutils literal notranslate"><span class="pre">uart_write()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module/sensor.html">sensor module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module/sensor.html#sensor.MCP3204"><code class="docutils literal notranslate"><span class="pre">MCP3204</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/sensor.html#sensor.Sensor"><code class="docutils literal notranslate"><span class="pre">Sensor</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/sensor.html#sensor.SensorResult"><code class="docutils literal notranslate"><span class="pre">SensorResult</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module/usb.html">usb module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module/usb.html#usb.USB"><code class="docutils literal notranslate"><span class="pre">USB</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/usb.html#usb.USB.self.ports"><code class="docutils literal notranslate"><span class="pre">USB.self.ports</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/usb.html#usb.USB.self.identifys"><code class="docutils literal notranslate"><span class="pre">USB.self.identifys</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module/usb.html#usb.USB.self.names"><code class="docutils literal notranslate"><span class="pre">USB.self.names</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module/util.html">util module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module/util.html#util.get_pinode_config"><code class="docutils literal notranslate"><span class="pre">get_pinode_config()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -75,12 +130,12 @@
   <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="../get-started/index.html"
-                          title="previous chapter">概要説明とセットアップ</a></p>
+                          title="previous chapter">PiNode3 スタートガイド</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="camera.html"
-                          title="next chapter">camera module</a></p>
+    <p class="topless"><a href="configuration.html"
+                          title="next chapter">PiNode3 software configuration</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -113,10 +168,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="camera.html" title="camera module"
+          <a href="configuration.html" title="PiNode3 software configuration"
              >next</a> |</li>
         <li class="right" >
-          <a href="../get-started/index.html" title="概要説明とセットアップ"
+          <a href="../get-started/index.html" title="PiNode3 スタートガイド"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ソフトウェアリファレンス</a></li> 

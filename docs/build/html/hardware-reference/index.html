@@ -4,10 +4,10 @@
 <html lang="jp" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>ハードウェアリファレンス &#8212; PiNode3 1.0.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b849a4e9" />
     <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=658d757c" />
     
     <script src="../_static/documentation_options.js?v=eb881c4a"></script>
@@ -16,8 +16,8 @@
     <script src="../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="ハードウェア設計資料" href="hardware-design.html" />
-    <link rel="prev" title="util module" href="../software-reference/util.html" />
+    <link rel="next" title="ハードウェア資料" href="hardware-design.html" />
+    <link rel="prev" title="util module" href="../software-reference/module/util.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -33,10 +33,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="hardware-design.html" title="ハードウェア設計資料"
+          <a href="hardware-design.html" title="ハードウェア資料"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../software-reference/util.html" title="util module"
+          <a href="../software-reference/module/util.html" title="util module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ハードウェアリファレンス</a></li> 
@@ -50,18 +50,47 @@
             
   <section id="id1">
 <h1>ハードウェアリファレンス<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>PiNode3は以下のパーツから構成されています。</p>
+<ul class="simple">
+<li><p>PiNode3 メイン基板</p></li>
+<li><p>PiNode3 標準センサ</p></li>
+<li><p>PiNode3 強制通風筒センサ</p></li>
+<li><p>PiNode3 SPRESENSEカメラ</p></li>
+<li><p>PiNode3 果実径センサ</p></li>
+<li><p>PiNode3 茎径センサ</p></li>
+</ul>
+<p>PiNode3メイン基板にRaspberry Piを接続し、専用のソフトウェアをインストールすることで、PiNode3を利用することができます。
+その他センサは、PiNode3メイン基板に接続することで、センサデータを取得することができます。</p>
+<section id="id2">
+<h2>各種設定資料<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="spresense">
+<h3>SPRESENSEカメラボードのピント調整手順<a class="headerlink" href="#spresense" title="Link to this heading">¶</a></h3>
+<p>ピント調整は真ん中の黒い部分を回すことで行うことができます。</p>
+<a class="reference internal image-reference" href="../_images/spresense_camera_focus.jpg"><img alt="../_images/spresense_camera_focus.jpg" class="align-center" src="../_images/spresense_camera_focus.jpg" style="width: 400px;" /></a>
+<p>カメラはアクリルで保護されていますが、背面のねじを外すことで内部のカメラを操作可能です。以下の画像のように回すことでピント調整が可能です。</p>
+<a class="reference internal image-reference" href="../_images/spresense_camera_focus2.jpg"><img alt="../_images/spresense_camera_focus2.jpg" class="align-center" src="../_images/spresense_camera_focus2.jpg" style="width: 400px;" /></a>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="hardware-design.html">ハードウェア設計資料</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hardware-design.html#id2">回路図設計資料</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware-design.html#pinode3">PiNode3ケース設計図資料</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware-design.html#spresnese">SPRESNESEケース設計図資料</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware-design.html#id5">センサノードケース設計図資料</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware-design.html#id8">強制通風筒センサモジュール設計図資料</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware-design.html">ハードウェア資料</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hardware-design.html#pinode3">PiNode3ケース</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware-design.html#spresnese">SPRESNESEケース</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware-design.html#id2">センサノードケース設計図資料</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware-design.html#id5">強制通風筒センサモジュール設計図資料</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware-design.html#id8">回路図設計資料</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sensor.html">利用センサ資料</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sensor.html#id2">標準センサ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sensor.html#id7">強制通風筒センサ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sensor.html#spresense">SPRESENSEカメラ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sensor.html#id15">果実径センサ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sensor.html#id17">茎径センサ</a></li>
 </ul>
 </li>
 </ul>
 </div>
+</section>
+</section>
 </section>
 
 
@@ -72,14 +101,27 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">ハードウェアリファレンス</a><ul>
+<li><a class="reference internal" href="#id2">各種設定資料</a><ul>
+<li><a class="reference internal" href="#spresense">SPRESENSEカメラボードのピント調整手順</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="../software-reference/util.html"
+    <p class="topless"><a href="../software-reference/module/util.html"
                           title="previous chapter">util module</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
     <p class="topless"><a href="hardware-design.html"
-                          title="next chapter">ハードウェア設計資料</a></p>
+                          title="next chapter">ハードウェア資料</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -112,10 +154,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="hardware-design.html" title="ハードウェア設計資料"
+          <a href="hardware-design.html" title="ハードウェア資料"
              >next</a> |</li>
         <li class="right" >
-          <a href="../software-reference/util.html" title="util module"
+          <a href="../software-reference/module/util.html" title="util module"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ハードウェアリファレンス</a></li> 

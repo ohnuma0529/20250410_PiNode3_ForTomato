@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+
+<html lang="jp" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>利用センサ資料 &#8212; PiNode3 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b849a4e9" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=658d757c" />
+    
+    <script src="../_static/documentation_options.js?v=eb881c4a"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PiNode3利用方法" href="../utilization/index.html" />
+    <link rel="prev" title="ハードウェア設計資料" href="hardware-design.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../utilization/index.html" title="PiNode3利用方法"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="hardware-design.html" title="ハードウェア設計資料"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">ハードウェアリファレンス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">利用センサ資料</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1>利用センサ資料<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2>標準センサ<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="sht25">
+<h3>温湿度センサ(SHT25)<a class="headerlink" href="#sht25" title="Link to this heading">¶</a></h3>
+<p><strong>概要</strong></p>
+<p>SHT25は高精度のデジタル湿度および温度センサです。相対湿度精度±1.8%RH、
+温度精度±0.2℃を実現しています。I2Cインターフェースをサポートしており、温度と湿度の同時測定が可能です。</p>
+<p><strong>特長</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>湿度特性</strong></dt><dd><ul>
+<li><p>相対湿度範囲: 0 - 100%RH</p></li>
+<li><p>応答時間: 8秒(τ63%)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>温度特性</strong></dt><dd><ul>
+<li><p>温度範囲: -40 - 125℃</p></li>
+<li><p>応答時間: 5秒(τ63%)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>一般特性</strong></dt><dd><ul>
+<li><p>電源電圧: 2.1 - 3.6V</p></li>
+<li><p>平均供給電流: 300 μA</p></li>
+<li><p>サイズ: 3.0 x 3.0 x 1.1mm</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>各種リンク</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://sensirion.com/products/catalog/SHT25">SHT25 公式サイト</a></p></li>
+<li><p><a class="reference external" href="https://sensirion.com/resource/datasheet/sht25">SHT25 データシート</a></p></li>
+</ul>
+</section>
+<section id="s16838-01ms">
+<h3>照度センサ(S16838-01MS)<a class="headerlink" href="#s16838-01ms" title="Link to this heading">¶</a></h3>
+<p><strong>概要</strong></p>
+<p>S16838-01MSは低暗電流のSiフォトダイオードで、低照度から高照度までを高精度に測定できます。プリモールドパッケージにより、迷光の影響を最小限に抑えます。</p>
+<p><strong>特長</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>受光面サイズ</strong></dt><dd><ul>
+<li><p>2.8 x 2.4 mm</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>スペクトル感度特性</strong></dt><dd><ul>
+<li><p>感度波長範囲: 320～730 nm</p></li>
+<li><p>最大感度波長: 560 nm</p></li>
+<li><p>受光感度: 0.3 A/W</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>電気特性</strong></dt><dd><ul>
+<li><p>逆電圧: 最大 10 V</p></li>
+<li><p>暗電流: 最大 10 pA</p></li>
+<li><p>端子間容量: 700 pF</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>一般特性</strong></dt><dd><ul>
+<li><p>パッケージ: プラスチック</p></li>
+<li><p>冷却: 非冷却</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>各種リンク</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.hamamatsu.com/jp/ja/product/optical-sensors/photodiodes/si-photodiodes/S16838-01MS.html">S16838-01MS 公式サイト</a></p></li>
+<li><p><a class="reference external" href="https://www.hamamatsu.com/content/dam/hamamatsu-photonics/sites/documents/99_SALES_LIBRARY/ssd/s16765-01ms_etc_kspd1092j.pdf">S16838-01MS データシート</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id7">
+<h2>強制通風筒センサ<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<section id="sht85">
+<h3>温湿度センサ(SHT85)<a class="headerlink" href="#sht85" title="Link to this heading">¶</a></h3>
+<p>SHT85は高精度のデジタル湿度および温度センサです。相対湿度精度±1.5%RH、温度精度±0.1℃を実現しています。I2Cインターフェースをサポートしており、温度と湿度の同時測定が可能です。</p>
+<p><strong>特長</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>湿度特性</strong></dt><dd><ul>
+<li><p>相対湿度範囲: 0 - 100%RH</p></li>
+<li><p>応答時間: 8秒(τ63%)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>温度特性</strong></dt><dd><ul>
+<li><p>温度範囲: -40 - 125℃</p></li>
+<li><p>応答時間: 5秒(τ63%)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>一般特性</strong></dt><dd><ul>
+<li><p>電源電圧: 2.15 - 5.5V</p></li>
+<li><p>平均供給電流: 28 μA</p></li>
+<li><p>最大供給電流: 1000 μA</p></li>
+<li><p>サイズ: 19 x 5.6 x 3.5 mm</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>各種リンク</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://sensirion.com/jp/products/product-catalog/SHT85">SHT85 公式サイト</a></p></li>
+<li><p><a class="reference external" href="https://sensirion.com/resource/datasheet/sht85">SHT85 データシート</a></p></li>
+</ul>
+</section>
+</section>
+<section id="spresense">
+<h2>SPRESENSEカメラ<a class="headerlink" href="#spresense" title="Link to this heading">¶</a></h2>
+<section id="id10">
+<h3>Spresenseメインボード<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p><strong>概要</strong></p>
+<p>Spresenseは、ソニーのCXD5602センシングプロセッサを搭載したArduino互換の高性能IoTボードです。GPS測位、ハイレゾオーディオの再生・録音、低消費電力のマルチコアを備えています。</p>
+<p><strong>特長</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>プロセッサ</strong></dt><dd><ul>
+<li><p>CXD5602</p></li>
+<li><p>8 MBフラッシュメモリ</p></li>
+<li><p>GPS機能</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>インターフェース</strong></dt><dd><ul>
+<li><p>各種GPIO (UART, SPI, I2C, I2S)</p></li>
+<li><p>ADC 2チャンネル</p></li>
+<li><p>カメラ専用コネクタ</p></li>
+<li><p>GNSSアンテナ</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>電源</strong></dt><dd><ul>
+<li><p>1.8V I/O電圧</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>各種リンク</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://developer.sony.com/spresense/development-guides/introduction_ja.html#_spresense_%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9C%E3%83%BC%E3%83%89">Spresenseメインボード公式サイト</a></p></li>
+<li><p><a class="reference external" href="https://github.com/sonydevworld/spresense-hw-design-files/raw/master/CXD5602PWBMAIN1/schematics/CXD5602PWBMAIN1_schematics.pdf">Spresenseメインボード回路図</a></p></li>
+</ul>
+</section>
+<section id="spresensehdr">
+<h3>SpresenseHDRカメラボード<a class="headerlink" href="#spresensehdr" title="Link to this heading">¶</a></h3>
+<p><strong>概要</strong></p>
+<p>Spresense HDRカメラボードは、高ダイナミックレンジ（HDR）撮影に対応したカメラモジュールを搭載した拡張ボードです。CXD5602プロセッサと連携し、広範な照明条件下での詳細な画像キャプチャを実現します。</p>
+<p><strong>特長</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>カメラモジュール</strong></dt><dd><ul>
+<li><p>高ダイナミックレンジ（HDR）対応</p></li>
+<li><p>有効画素数：511万画素</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>インターフェース</strong></dt><dd><ul>
+<li><p>専用コネクタを通じてSpresenseメインボードと接続</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>電源</strong></dt><dd><ul>
+<li><p>メインボードからの供給</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>各種リンク</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://developer.sony.com/spresense/development-guides/introduction_ja.html#_spresense_hdr_%E3%82%AB%E3%83%A1%E3%83%A9%E3%83%9C%E3%83%BC%E3%83%89">SpresenseHDRカメラ公式サイト</a></p></li>
+<li><p><a class="reference external" href="https://github.com/sonydevworld/spresense-hw-design-files/raw/master/CXD5602PWBCAM2/schematics/CXD5602PWBCAM2_schematics.pdf">SpresenseHDRカメラ回路図</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id15">
+<h2>果実径センサ<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<section id="se-fi-lm">
+<h3>円形果実生長センサ(SE-FI-LM)<a class="headerlink" href="#se-fi-lm" title="Link to this heading">¶</a></h3>
+<p>SE-FI-LMシリーズは、果実の外径測定および成長速度の計測に特化したセンサです。直径範囲30～160mmの無傷の丸い果実のサイズと成長速度を高精度に測定します。これにより、水収支や果実の水供給バランス、環境要因の影響を評価できます。</p>
+<p><strong>特長</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>測定範囲</strong></dt><dd><ul>
+<li><p>直径: 30～160mm</p></li>
+<li><p>分解能: 0.065mm</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>感度</strong></dt><dd><ul>
+<li><p>15.4 mV/mm</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>出力</strong></dt><dd><ul>
+<li><p>SE-FI-LM: 0～2V</p></li>
+<li><p>SE-FI-LMi: 4～20mA</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>電源および消費電力</strong></dt><dd><ul>
+<li><p>供給電源: 10～30VDC</p></li>
+<li><p>消費電力: SE-FI-LM 最大1.5W、SE-FI-LMi 最大2.0W</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>動作環境</strong></dt><dd><ul>
+<li><p>温度範囲: 0～50℃</p></li>
+<li><p>温度影響: &lt; 0.02% total stroke/℃</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>各種リンク</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.senecom.co.jp/film.html">SE-FI-LM 公式サイト</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id17">
+<h2>茎径センサ<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h2>
+<section id="hl-ac1">
+<h3>超小型レーザラインセンサ(HL-AC1)<a class="headerlink" href="#hl-ac1" title="Link to this heading">¶</a></h3>
+<p><strong>概要</strong></p>
+<p>HL-AC1は超小型のレーザラインセンサで、精密な距離測定や位置決めに最適です。NPN出力タイプで、広範囲の産業用途に対応しています。</p>
+<p><strong>特長</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>測定範囲</strong></dt><dd><ul>
+<li><p>0.1～10m (使用するセンサヘッドによる)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>出力</strong></dt><dd><ul>
+<li><p>リニア出力: 電流/電圧出力切り替え式</p></li>
+<li><p>電流出力: 4～20mA</p></li>
+<li><p>電圧出力: ±4V</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>電源および消費電力</strong></dt><dd><ul>
+<li><p>電源電圧: 12～24V DC</p></li>
+<li><p>消費電流: 190mA以下</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>応答速度</strong></dt><dd><ul>
+<li><p>測定周期: 150μs</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>環境特性</strong></dt><dd><ul>
+<li><p>使用温度範囲: 0～50℃</p></li>
+<li><p>耐振動: 10～150Hz 複振幅0.7mm XYZ各方向80分</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>各種リンク</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www3.panasonic.biz/ac/j/search_num/index.jsp?c=detail&amp;part_no=HL-AC1">HL-AC1 公式サイト</a></p></li>
+<li><p><a class="reference external" href="https://www3.panasonic.biz/ac/j/dl/manual/index.jsp?series_cd=1653&amp;part_no=HL-AC1">HL-AC1 マニュアル</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">利用センサ資料</a><ul>
+<li><a class="reference internal" href="#id2">標準センサ</a><ul>
+<li><a class="reference internal" href="#sht25">温湿度センサ(SHT25)</a></li>
+<li><a class="reference internal" href="#s16838-01ms">照度センサ(S16838-01MS)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">強制通風筒センサ</a><ul>
+<li><a class="reference internal" href="#sht85">温湿度センサ(SHT85)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#spresense">SPRESENSEカメラ</a><ul>
+<li><a class="reference internal" href="#id10">Spresenseメインボード</a></li>
+<li><a class="reference internal" href="#spresensehdr">SpresenseHDRカメラボード</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id15">果実径センサ</a><ul>
+<li><a class="reference internal" href="#se-fi-lm">円形果実生長センサ(SE-FI-LM)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id17">茎径センサ</a><ul>
+<li><a class="reference internal" href="#hl-ac1">超小型レーザラインセンサ(HL-AC1)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="hardware-design.html"
+                          title="previous chapter">ハードウェア設計資料</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../utilization/index.html"
+                          title="next chapter">PiNode3利用方法</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/hardware-reference/sensor.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../utilization/index.html" title="PiNode3利用方法"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="hardware-design.html" title="ハードウェア設計資料"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >ハードウェアリファレンス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">利用センサ資料</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Mineno Laboratory.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

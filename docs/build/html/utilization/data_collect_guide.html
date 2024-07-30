@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+
+<html lang="jp" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>InfluxDB データ取得のガイド &#8212; PiNode3 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b849a4e9" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=658d757c" />
+    
+    <script src="../_static/documentation_options.js?v=eb881c4a"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="InfluxDB データ監視のガイド" href="data_watch_guide.html" />
+    <link rel="prev" title="InfluxDB データ分析のガイド" href="data_analysis_guide.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="data_watch_guide.html" title="InfluxDB データ監視のガイド"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="data_analysis_guide.html" title="InfluxDB データ分析のガイド"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PiNode3利用方法</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">InfluxDB データ取得のガイド</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="influxdb">
+<h1>InfluxDB データ取得のガイド<a class="headerlink" href="#influxdb" title="Link to this heading">¶</a></h1>
+<p>このガイドでは、InfluxDB v2 APIを使用してデータを取得するための方法を説明します。 以下の方法をカバーします：</p>
+<ul class="simple">
+<li><p>必要なツールのインストール</p></li>
+<li><p>環境変数の設定</p></li>
+<li><p>Bashスクリプトを使用したデータ取得</p></li>
+<li><p>InfluxDB GUIを使用したデータ取得</p></li>
+<li><p>Pythonを使用したデータ取得</p></li>
+</ul>
+<section id="id1">
+<h2>必要なツールのインストール<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>以下のツールが必要です。 インストールされていない場合は、以下のコマンドを使用してインストールしてください。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>curl<span class="w"> </span>jq
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>環境変数の設定<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>まず以下の環境変数を設定してください。これらは、InfluxDBのURL、トークン、組織名、およびバケット名となります。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">INFLUXDB_URL</span><span class="o">=</span><span class="s2">&quot;http://[IP_ADDRESS]:8086&quot;</span><span class="w">  </span><span class="c1"># InfluxDBのURL</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">INFLUXDB_TOKEN</span><span class="o">=</span><span class="s2">&quot;[YOUR_TOKEN]&quot;</span><span class="w">            </span><span class="c1"># 認証トークン</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">INFLUXDB_ORG</span><span class="o">=</span><span class="s2">&quot;[YOUR_ORGANIZATION]&quot;</span><span class="w">       </span><span class="c1"># 組織名</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">INFLUXDB_BUCKET</span><span class="o">=</span><span class="s2">&quot;[YOUR_BUCKET]&quot;</span><span class="w">          </span><span class="c1"># バケット名</span>
+</pre></div>
+</div>
+</section>
+<section id="bash">
+<h2>Bashスクリプトを使用したデータ取得<a class="headerlink" href="#bash" title="Link to this heading">¶</a></h2>
+<p>InfluxDB v2 APIからデータを取得し、解析を行います。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1"># クエリを設定</span>
+<span class="nv">QUERY</span><span class="o">=</span><span class="s1">&#39;from(bucket: &quot;pinode&quot;)</span>
+<span class="s1">  |&gt; range(start: -1h)</span>
+<span class="s1">  |&gt; filter(fn: (r) =&gt; r._measurement == &quot;00&quot;)</span>
+<span class="s1">  |&gt; filter(fn: (r) =&gt; r._field== &quot;temperature&quot;)</span>
+<span class="s1">  |&gt; yield(name: &quot;mean&quot;)</span>
+<span class="s1">  &#39;</span>
+
+<span class="c1"># curlコマンドを実行してデータを取得</span>
+<span class="nv">response</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">INFLUXDB_URL</span><span class="si">}</span><span class="s2">/api/v2/query?org=</span><span class="si">${</span><span class="nv">INFLUXDB_ORG</span><span class="si">}</span><span class="s2">&amp;bucket=get-started&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--header<span class="w"> </span><span class="s2">&quot;Authorization: Token </span><span class="si">${</span><span class="nv">INFLUXDB_TOKEN</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--header<span class="w"> </span><span class="s2">&quot;Content-Type: application/vnd.flux&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--header<span class="w"> </span><span class="s2">&quot;Accept: application/csv&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span><span class="s2">&quot;query=</span><span class="si">${</span><span class="nv">QUERY</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="k">)</span>
+
+<span class="c1"># エラーチェック</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;curlコマンドの実行中にエラーが発生しました。&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+
+<span class="c1"># データをCSV形式で保存</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>./influxdb_data.csv
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h2>スクリプトの実行<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>このスクリプトは、<cite>scripts/fetch_influxdb_data.sh</cite> に記載されています。 これを実行します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scripts/fetch_influxdb_data.sh
+</pre></div>
+</div>
+<p>スクリプトが正常に実行されると、InfluxDBから取得したデータが`influxdb_data.csv`に保存されます。</p>
+</section>
+<section id="influxdb-gui">
+<h2>InfluxDB GUIを使用したデータ取得<a class="headerlink" href="#influxdb-gui" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>InfluxDBのGUIページに移動します。デフォルトのURLは`http://[IP_ADDRESS or HOSTNAME]:8086`です。</p></li>
+<li><p>ログインします。デフォルトのユーザー名は`pinode`、パスワードは`pinode-pass`です。</p></li>
+<li><p>左側のメニューから「Explore」を選択します。</p></li>
+<li><p>クエリエディタに以下のFluxクエリを入力します。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>ログイン設定は <a class="reference internal" href="../software-reference/configuration.html"><span class="doc">PiNode3 software configuration</span></a> を参照してください。</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">from</span><span class="p">(</span><span class="n">bucket</span><span class="p">:</span> <span class="s2">&quot;pinode&quot;</span><span class="p">)</span>
+  <span class="o">|&gt;</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="n">h</span><span class="p">)</span>
+  <span class="o">|&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">r</span><span class="o">.</span><span class="n">_measurement</span> <span class="o">==</span> <span class="s2">&quot;00&quot;</span><span class="p">)</span>
+  <span class="o">|&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">r</span><span class="o">.</span><span class="n">_field</span> <span class="o">==</span> <span class="s2">&quot;temperature&quot;</span><span class="p">)</span>
+  <span class="o">|&gt;</span> <span class="k">yield</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>「Submit」ボタンをクリックしてクエリを実行します。</p></li>
+<li><p>結果が表示されたら必要に応じてデータをエクスポートします。</p></li>
+</ol>
+</section>
+<section id="python">
+<h2>Pythonを使用したデータ取得<a class="headerlink" href="#python" title="Link to this heading">¶</a></h2>
+<p>以下は、Pythonを使用してInfluxDB v2 APIからデータを取得する例です。</p>
+</section>
+<section id="id4">
+<h2>必要なライブラリのインストール<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>influxdb-client
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2>Pythonスクリプト<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">influxdb_client</span> <span class="kn">import</span> <span class="n">InfluxDBClient</span>
+
+<span class="c1"># 環境変数の設定</span>
+<span class="n">INFLUXDB_URL</span> <span class="o">=</span> <span class="s2">&quot;http://[INFLUXDB_URL]:8086&quot;</span>
+<span class="n">INFLUXDB_TOKEN</span> <span class="o">=</span> <span class="s2">&quot;[INFLUXDB_TOKEN]&quot;</span>
+<span class="n">INFLUXDB_ORG</span> <span class="o">=</span> <span class="s2">&quot;pinode&quot;</span>
+<span class="n">INFLUXDB_BUCKET</span> <span class="o">=</span> <span class="s2">&quot;pinode&quot;</span>
+
+<span class="c1"># InfluxDBクライアントの作成</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">InfluxDBClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">INFLUXDB_URL</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">INFLUXDB_TOKEN</span><span class="p">,</span> <span class="n">org</span><span class="o">=</span><span class="n">INFLUXDB_ORG</span><span class="p">)</span>
+
+<span class="c1"># クエリを設定</span>
+<span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">from(bucket: &quot;pinode&quot;)</span>
+<span class="s2">    |&gt; range(start: -1h)</span>
+<span class="s2">    |&gt; filter(fn: (r) =&gt; r._measurement == &quot;00&quot;)</span>
+<span class="s2">    |&gt; filter(fn: (r) =&gt; r._field == &quot;temperature&quot;)</span>
+<span class="s2">    |&gt; yield(name: &quot;mean&quot;)</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># クエリを実行</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">query_api</span><span class="p">()</span><span class="o">.</span><span class="n">query_data_frame</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="c1"># CSVファイルに保存</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;influxdb_data.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2>スクリプトの実行<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<p>このスクリプトは、<cite>scripts/fetch_influxdb_data.py</cite> に記載されています。 これを実行します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>scripts/fetch_influxdb_data.py
+</pre></div>
+</div>
+<p>スクリプトが正常に実行されると、InfluxDBから取得したデータが`influxdb_data.csv`に保存されます。</p>
+</section>
+<section id="id7">
+<h2>InfluxDB データ取得結果<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<p>以下の出力は、InfluxDBから取得したデータの例です。 このデータは、特定のバケットから過去1時間の温度データをクエリした結果です。 各フィールドの意味を詳しく説明します。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>result</p></th>
+<th class="head"><p>table</p></th>
+<th class="head"><p>_start</p></th>
+<th class="head"><p>_stop</p></th>
+<th class="head"><p>_time</p></th>
+<th class="head"><p>_value</p></th>
+<th class="head"><p>_field</p></th>
+<th class="head"><p>_measurement</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mean</p></td>
+<td><p>0</p></td>
+<td><p>2024-06-30T07:49:33.091101235Z</p></td>
+<td><p>2024-06-30T08:49:33.091101235Z</p></td>
+<td><p>2024-06-30T07:49:53Z</p></td>
+<td><p>24.804</p></td>
+<td><p>temperature</p></td>
+<td><p>00</p></td>
+</tr>
+<tr class="row-odd"><td><p>mean</p></td>
+<td><p>0</p></td>
+<td><p>2024-06-30T07:49:33.091101235Z</p></td>
+<td><p>2024-06-30T08:49:33.091101235Z</p></td>
+<td><p>2024-06-30T07:50:54Z</p></td>
+<td><p>24.847</p></td>
+<td><p>temperature</p></td>
+<td><p>00</p></td>
+</tr>
+<tr class="row-even"><td><p>mean</p></td>
+<td><p>0</p></td>
+<td><p>2024-06-30T07:49:33.091101235Z</p></td>
+<td><p>2024-06-30T08:49:33.091101235Z</p></td>
+<td><p>2024-06-30T07:51:03Z</p></td>
+<td><p>24.847</p></td>
+<td><p>temperature</p></td>
+<td><p>00</p></td>
+</tr>
+<tr class="row-odd"><td><p>mean</p></td>
+<td><p>0</p></td>
+<td><p>2024-06-30T07:49:33.091101235Z</p></td>
+<td><p>2024-06-30T08:49:33.091101235Z</p></td>
+<td><p>2024-06-30T07:52:13Z</p></td>
+<td><p>24.922</p></td>
+<td><p>temperature</p></td>
+<td><p>00</p></td>
+</tr>
+<tr class="row-even"><td><p>mean</p></td>
+<td><p>0</p></td>
+<td><p>2024-06-30T07:49:33.091101235Z</p></td>
+<td><p>2024-06-30T08:49:33.091101235Z</p></td>
+<td><p>2024-06-30T07:53:23Z</p></td>
+<td><p>24.997</p></td>
+<td><p>temperature</p></td>
+<td><p>00</p></td>
+</tr>
+<tr class="row-odd"><td><p>mean</p></td>
+<td><p>0</p></td>
+<td><p>2024-06-30T07:49:33.091101235Z</p></td>
+<td><p>2024-06-30T08:49:33.091101235Z</p></td>
+<td><p>2024-06-30T07:54:33Z</p></td>
+<td><p>25.04</p></td>
+<td><p>temperature</p></td>
+<td><p>00</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id8">
+<h2>各フィールドの説明<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>result</strong>: クエリの結果タイプを示します。ここではすべて`mean`となっており、平均値の計算結果を示しています。</p></li>
+<li><p><strong>table</strong>: データのテーブル番号を示します。すべて`0`なので、単一のテーブルに格納されています。</p></li>
+<li><p><strong>_start</strong>: クエリの開始時間を示します。例では <cite>2024-06-30T07:49:33.091101235Z</cite> です。</p></li>
+<li><p><strong>_stop</strong>: クエリの終了時間を示します。例では <cite>2024-06-30T08:49:33.091101235Z</cite> です。</p></li>
+<li><p><strong>_time</strong>: データポイントのタイムスタンプを示します。このタイムスタンプはUTCで表示されます。例えば、 <cite>2024-06-30T07:49:53Z</cite> は <cite>2024年6月30日 07:49:53 UTC</cite> を示しています。</p></li>
+<li><p><strong>_value</strong>: 測定された値を示します。例では温度データの値が表示されています。例えば、 <cite>24.804</cite> は温度を示します。</p></li>
+<li><p><strong>_field</strong>: 測定されたフィールド名を示します。例では <cite>temperature</cite> です。</p></li>
+<li><p><strong>_measurement</strong>: 測定の種類を示します。例では <cite>00</cite> です。</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">InfluxDB データ取得のガイド</a><ul>
+<li><a class="reference internal" href="#id1">必要なツールのインストール</a></li>
+<li><a class="reference internal" href="#id2">環境変数の設定</a></li>
+<li><a class="reference internal" href="#bash">Bashスクリプトを使用したデータ取得</a></li>
+<li><a class="reference internal" href="#id3">スクリプトの実行</a></li>
+<li><a class="reference internal" href="#influxdb-gui">InfluxDB GUIを使用したデータ取得</a></li>
+<li><a class="reference internal" href="#python">Pythonを使用したデータ取得</a></li>
+<li><a class="reference internal" href="#id4">必要なライブラリのインストール</a></li>
+<li><a class="reference internal" href="#id5">Pythonスクリプト</a></li>
+<li><a class="reference internal" href="#id6">スクリプトの実行</a></li>
+<li><a class="reference internal" href="#id7">InfluxDB データ取得結果</a></li>
+<li><a class="reference internal" href="#id8">各フィールドの説明</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="data_analysis_guide.html"
+                          title="previous chapter">InfluxDB データ分析のガイド</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="data_watch_guide.html"
+                          title="next chapter">InfluxDB データ監視のガイド</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/utilization/data_collect_guide.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="data_watch_guide.html" title="InfluxDB データ監視のガイド"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="data_analysis_guide.html" title="InfluxDB データ分析のガイド"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >PiNode3利用方法</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">InfluxDB データ取得のガイド</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Mineno Laboratory.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+
+<html lang="jp" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>PiNode3 software configuration &#8212; PiNode3 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b849a4e9" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=658d757c" />
+    
+    <script src="../_static/documentation_options.js?v=eb881c4a"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PiNode3 software directory structure" href="directory_structure.html" />
+    <link rel="prev" title="ソフトウェアリファレンス" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="directory_structure.html" title="PiNode3 software directory structure"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="ソフトウェアリファレンス"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">ソフトウェアリファレンス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PiNode3 software configuration</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pinode3-software-configuration">
+<h1>PiNode3 software configuration<a class="headerlink" href="#pinode3-software-configuration" title="Link to this heading">¶</a></h1>
+<p>このドキュメントは、PiNode3システムの設定ファイルに含まれる設定とパラメータについて説明します。
+インストール後に設定ファイルが /etc/pinode3/config.json に作成されます。
+こちらのファイルを編集することで、PiNode3システムの動作をカスタマイズすることができます。</p>
+<section id="id">
+<h2>デバイスID<a class="headerlink" href="#id" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>device_id</strong>: <cite>00</cite>
+デバイスの一意の識別子です。</p></li>
+</ul>
+</section>
+<section id="influxdb">
+<h2>InfluxDBの設定<a class="headerlink" href="#influxdb" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>port</strong>: <cite>8086</cite>
+InfluxDBのポート番号。</p></li>
+<li><p><strong>username</strong>: <cite>pinode</cite>
+InfluxDBにアクセスするためのユーザー名。</p></li>
+<li><p><strong>password</strong>: <cite>pinode-pass</cite>
+InfluxDBにアクセスするためのパスワード。</p></li>
+<li><p><strong>organization</strong>: <cite>pinode</cite>
+InfluxDBの組織名。</p></li>
+<li><p><strong>bucket</strong>: <cite>pinode</cite>
+データを保存するためのInfluxDBのバケット名。</p></li>
+</ul>
+</section>
+<section id="id1">
+<h2>センサーの設定<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>previous_data_path</strong>: <cite>/home/pinode3/data/sensor/previous_sensor_data.json</cite>
+前回のセンサ値のファイルパス。</p></li>
+<li><p><strong>csv_dir</strong>: <cite>/home/pinode3/data/sensor/lost</cite>
+CSVデータを保存するディレクトリのパス。</p></li>
+<li><p><strong>i2c_command</strong>
+各種センサーデータを読み取るためのI2Cコマンド。</p>
+<ul>
+<li><p><strong>i_v_light</strong>: <cite>/usr/local/bin/read_sensor -t s1133 -i 0</cite>
+内部照度を読み取るためのコマンド。</p></li>
+<li><p><strong>u_v_light</strong>: <cite>/usr/local/bin/read_sensor -t s1133 -i 1</cite>
+外部照度を読み取るためのコマンド。</p></li>
+<li><p><strong>temperature</strong>: <cite>/usr/local/bin/read_sensor -t sht25 -i 0 -m temp</cite>
+温度を読み取るためのコマンド。</p></li>
+<li><p><strong>humidity</strong>: <cite>/usr/local/bin/read_sensor -t sht25 -i 0 -m humi</cite>
+湿度を読み取るためのコマンド。</p></li>
+<li><p><strong>temperature_hq</strong>: ``
+強制通風筒センサの温度を読み取るためのコマンド（未設定）。</p></li>
+<li><p><strong>humidity_hq</strong>: ``
+強制通風筒センサの湿度を読み取るためのコマンド（未設定）。</p></li>
+</ul>
+</li>
+<li><p><strong>spi_channel</strong>
+SPIチャンネルの設定。</p>
+<ul>
+<li><p><strong>stem</strong>: <cite>0</cite>
+茎径センサのデータを読み取るためのSPIチャンネル番号。</p></li>
+<li><p><strong>fruit_diagram</strong>: <cite>1</cite>
+果実径センサを読み取るためのSPIチャンネル番号。</p></li>
+</ul>
+</li>
+<li><p><strong>min_value</strong>
+各センサ値の最小値。</p>
+<ul>
+<li><p><strong>i_v_light</strong>: <cite>0</cite></p></li>
+<li><p><strong>u_v_light</strong>: <cite>0</cite></p></li>
+<li><p><strong>temperature</strong>: <cite>-40</cite></p></li>
+<li><p><strong>humidity</strong>: <cite>0</cite></p></li>
+<li><p><strong>temperature_hq</strong>: <cite>-40</cite></p></li>
+<li><p><strong>humidity_hq</strong>: <cite>0</cite></p></li>
+<li><p><strong>stem</strong>: <cite>0.01</cite></p></li>
+<li><p><strong>fruit_diagram</strong>: <cite>0.01</cite></p></li>
+</ul>
+</li>
+<li><p><strong>max_value</strong>
+各センサ値の最大値。</p>
+<ul>
+<li><p><strong>i_v_light</strong>: <cite>1000000</cite></p></li>
+<li><p><strong>u_v_light</strong>: <cite>1000000</cite></p></li>
+<li><p><strong>temperature</strong>: <cite>125</cite></p></li>
+<li><p><strong>humidity</strong>: <cite>100</cite></p></li>
+<li><p><strong>temperature_hq</strong>: <cite>125</cite></p></li>
+<li><p><strong>humidity_hq</strong>: <cite>100</cite></p></li>
+<li><p><strong>stem</strong>: <cite>5</cite></p></li>
+<li><p><strong>fruit_diagram</strong>: <cite>2</cite></p></li>
+</ul>
+</li>
+<li><p><strong>sleep_time</strong>
+各センサのスリープ時間（秒単位）。</p>
+<ul>
+<li><p><strong>i_v_light</strong>: <cite>0.1</cite></p></li>
+<li><p><strong>u_v_light</strong>: <cite>0.1</cite></p></li>
+<li><p><strong>temperature</strong>: <cite>0.1</cite></p></li>
+<li><p><strong>humidity</strong>: <cite>0.1</cite></p></li>
+<li><p><strong>temperature_hq</strong>: <cite>0.1</cite></p></li>
+<li><p><strong>humidity_hq</strong>: <cite>0.1</cite></p></li>
+<li><p><strong>stem</strong>: <cite>0.1</cite></p></li>
+<li><p><strong>fruit_diagram</strong>: <cite>0.1</cite></p></li>
+</ul>
+</li>
+<li><p><strong>max_retry_count</strong>
+各センサの最大再試行回数。</p>
+<ul>
+<li><p><strong>i_v_light</strong>: <cite>3</cite></p></li>
+<li><p><strong>u_v_light</strong>: <cite>3</cite></p></li>
+<li><p><strong>temperature</strong>: <cite>3</cite></p></li>
+<li><p><strong>humidity</strong>: <cite>3</cite></p></li>
+<li><p><strong>temperature_hq</strong>: <cite>3</cite></p></li>
+<li><p><strong>humidity_hq</strong>: <cite>3</cite></p></li>
+<li><p><strong>stem</strong>: <cite>3</cite></p></li>
+<li><p><strong>fruit_diagram</strong>: <cite>3</cite></p></li>
+</ul>
+</li>
+<li><p><strong>retry_interval</strong>
+各センサの再試行間隔（秒単位）。</p>
+<ul>
+<li><p><strong>i_v_light</strong>: <cite>0.3</cite></p></li>
+<li><p><strong>u_v_light</strong>: <cite>0.3</cite></p></li>
+<li><p><strong>temperature</strong>: <cite>0.3</cite></p></li>
+<li><p><strong>humidity</strong>: <cite>0.3</cite></p></li>
+<li><p><strong>temperature_hq</strong>: <cite>0.3</cite></p></li>
+<li><p><strong>humidity_hq</strong>: <cite>0.3</cite></p></li>
+<li><p><strong>stem</strong>: <cite>0.5</cite></p></li>
+<li><p><strong>fruit_diagram</strong>: <cite>0.5</cite></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2>カメラの設定<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>image_dir</strong>: <cite>/home/pinode/data/image</cite>
+画像を保存するディレクトリのパス。</p></li>
+<li><p><strong>time_out</strong>
+各カメラのタイムアウト時間（秒単位）。</p>
+<ul>
+<li><p><strong>usb_camera</strong>: <cite>20</cite>
+USBカメラのタイムアウト時間。</p></li>
+<li><p><strong>SPRESENSE</strong>: <cite>50</cite>
+SPRESENSEカメラのタイムアウト時間。</p></li>
+</ul>
+</li>
+<li><p><strong>max_retry_count</strong>
+各カメラの最大再試行回数。</p>
+<ul>
+<li><p><strong>usb_camera</strong>: <cite>3</cite></p></li>
+<li><p><strong>SPRESENSE</strong>: <cite>3</cite></p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">PiNode3 software configuration</a><ul>
+<li><a class="reference internal" href="#id">デバイスID</a></li>
+<li><a class="reference internal" href="#influxdb">InfluxDBの設定</a></li>
+<li><a class="reference internal" href="#id1">センサーの設定</a></li>
+<li><a class="reference internal" href="#id2">カメラの設定</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">ソフトウェアリファレンス</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="directory_structure.html"
+                          title="next chapter">PiNode3 software directory structure</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/software-reference/configuration.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="directory_structure.html" title="PiNode3 software directory structure"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="ソフトウェアリファレンス"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >ソフトウェアリファレンス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PiNode3 software configuration</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Mineno Laboratory.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

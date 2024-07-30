@@ -1,0 +1,154 @@
+===================================
+PiNode3 software configuration
+===================================
+
+
+
+このドキュメントは、PiNode3システムの設定ファイルに含まれる設定とパラメータについて説明します。
+インストール後に設定ファイルが /etc/pinode3/config.json に作成されます。
+こちらのファイルを編集することで、PiNode3システムの動作をカスタマイズすることができます。
+
+
+デバイスID
+-----------------------------------
+
+- **device_id**: `00`
+  デバイスの一意の識別子です。
+
+InfluxDBの設定
+-----------------------------------
+
+- **port**: `8086`
+  InfluxDBのポート番号。
+
+- **username**: `pinode`
+  InfluxDBにアクセスするためのユーザー名。
+
+- **password**: `pinode-pass`
+  InfluxDBにアクセスするためのパスワード。
+
+- **organization**: `pinode`
+  InfluxDBの組織名。
+
+- **bucket**: `pinode`
+  データを保存するためのInfluxDBのバケット名。
+
+センサーの設定
+-----------------------------------
+
+- **previous_data_path**: `/home/pinode3/data/sensor/previous_sensor_data.json`
+  前回のセンサ値のファイルパス。
+
+- **csv_dir**: `/home/pinode3/data/sensor/lost`
+  CSVデータを保存するディレクトリのパス。
+
+- **i2c_command**
+  各種センサーデータを読み取るためのI2Cコマンド。
+
+  - **i_v_light**: `/usr/local/bin/read_sensor -t s1133 -i 0`
+    内部照度を読み取るためのコマンド。
+
+  - **u_v_light**: `/usr/local/bin/read_sensor -t s1133 -i 1`
+    外部照度を読み取るためのコマンド。
+
+  - **temperature**: `/usr/local/bin/read_sensor -t sht25 -i 0 -m temp`
+    温度を読み取るためのコマンド。
+
+  - **humidity**: `/usr/local/bin/read_sensor -t sht25 -i 0 -m humi`
+    湿度を読み取るためのコマンド。
+
+  - **temperature_hq**: ``
+    強制通風筒センサの温度を読み取るためのコマンド（未設定）。
+
+  - **humidity_hq**: ``
+    強制通風筒センサの湿度を読み取るためのコマンド（未設定）。
+
+- **spi_channel**
+  SPIチャンネルの設定。
+
+  - **stem**: `0`
+    茎径センサのデータを読み取るためのSPIチャンネル番号。
+
+  - **fruit_diagram**: `1`
+    果実径センサを読み取るためのSPIチャンネル番号。
+
+- **min_value**
+  各センサ値の最小値。
+
+  - **i_v_light**: `0`
+  - **u_v_light**: `0`
+  - **temperature**: `-40`
+  - **humidity**: `0`
+  - **temperature_hq**: `-40`
+  - **humidity_hq**: `0`
+  - **stem**: `0.01`
+  - **fruit_diagram**: `0.01`
+
+- **max_value**
+  各センサ値の最大値。
+
+  - **i_v_light**: `1000000`
+  - **u_v_light**: `1000000`
+  - **temperature**: `125`
+  - **humidity**: `100`
+  - **temperature_hq**: `125`
+  - **humidity_hq**: `100`
+  - **stem**: `5`
+  - **fruit_diagram**: `2`
+
+- **sleep_time**
+  各センサのスリープ時間（秒単位）。
+
+  - **i_v_light**: `0.1`
+  - **u_v_light**: `0.1`
+  - **temperature**: `0.1`
+  - **humidity**: `0.1`
+  - **temperature_hq**: `0.1`
+  - **humidity_hq**: `0.1`
+  - **stem**: `0.1`
+  - **fruit_diagram**: `0.1`
+
+- **max_retry_count**
+  各センサの最大再試行回数。
+
+  - **i_v_light**: `3`
+  - **u_v_light**: `3`
+  - **temperature**: `3`
+  - **humidity**: `3`
+  - **temperature_hq**: `3`
+  - **humidity_hq**: `3`
+  - **stem**: `3`
+  - **fruit_diagram**: `3`
+
+- **retry_interval**
+  各センサの再試行間隔（秒単位）。
+
+  - **i_v_light**: `0.3`
+  - **u_v_light**: `0.3`
+  - **temperature**: `0.3`
+  - **humidity**: `0.3`
+  - **temperature_hq**: `0.3`
+  - **humidity_hq**: `0.3`
+  - **stem**: `0.5`
+  - **fruit_diagram**: `0.5`
+
+カメラの設定
+--------------
+
+- **image_dir**: `/home/pinode/data/image`
+  画像を保存するディレクトリのパス。
+
+- **time_out**
+  各カメラのタイムアウト時間（秒単位）。
+
+  - **usb_camera**: `20`
+    USBカメラのタイムアウト時間。
+
+  - **SPRESENSE**: `50`
+    SPRESENSEカメラのタイムアウト時間。
+
+- **max_retry_count**
+  各カメラの最大再試行回数。
+
+  - **usb_camera**: `3`
+  - **SPRESENSE**: `3`

@@ -1,0 +1,519 @@
+
+<!DOCTYPE html>
+
+<html lang="jp" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>read_sensor module &#8212; PiNode3 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b849a4e9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=658d757c" />
+    
+    <script src="../../_static/documentation_options.js?v=eb881c4a"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">read_sensor module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-read_sensor">
+<span id="read-sensor-module"></span><h1>read_sensor module<a class="headerlink" href="#module-read_sensor" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.dsw_read">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">dsw_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.dsw_read" title="Link to this definition">¶</a></dt>
+<dd><p>Raspberry_piでのデジタルスイッチ(DIPスイッチ)の状態を読み取るためのメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dsw</strong> (<em>int</em>) -- 各種スイッチ状態をまとめた結合値</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>各種操作を以下に示す．重複内容は割愛</p>
+<p>dsw1 = pi.read(12): GPIOピン12の状態(ON=0,OFF=1)を読み取りdsw1に代入</p>
+<p>dsw1 = ~dsw1 &amp; 0x01: 読み取ったスイッチの状態 (dsw1) を反転. (ON=1,OFF=0)</p>
+<p>dsw  = (dsw4 &lt;&lt; 3) | (dsw3 &lt;&lt; 2) | (dsw2 &lt;&lt; 1) | (dsw1 &lt;&lt; 0):</p>
+<p>各種スイッチの反転した状態の値をビットシフト演算で結合.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.get">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.get" title="Link to this definition">¶</a></dt>
+<dd><p>入力文字列に応じた各種センサデータメソッドを起動し出力結果を返却</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sensor</strong> (<em>str</em>) -- センサ名</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>各種センサから得られたデータ</strong></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>main.init(pi): GPIOピンを用いた入出力を準備</p>
+<p>pi.serial_data_available(g_huart0):</p>
+<blockquote>
+<div><p>指定されたシリアルポート(g_huart0)で受信可能なデータのバイト数を整数で返す</p>
+<p>受信可能なデータがない場合は0を返す</p>
+</div></blockquote>
+<p>pi.serial_read_byte(g_huart0):</p>
+<blockquote>
+<div><p>指定されたシリアルポート(g_huart0)から1バイトのデータを読み込み整数として返す</p>
+<p>受信データがない場合は-1を返す</p>
+</div></blockquote>
+<p>入力文字列に応じて各種センサデータ取得メソッドを起動し, メソッド返却値を返却</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.init_pigpio">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">init_pigpio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.init_pigpio" title="Link to this definition">¶</a></dt>
+<dd><p>RasPberryPi上でGPIO制御のためにpigpioライブラリを初期化</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_sensor.pi">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">pi</span></span><a class="headerlink" href="#read_sensor.pi" title="Link to this definition">¶</a></dt>
+<dd><p>pigpioライブラリのインスタンス. GPIOピンを制御するために使用</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>piogio.pi</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>接続をグローバル変数 pi に割り当て</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.led_show">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">led_show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.led_show" title="Link to this definition">¶</a></dt>
+<dd><p>LED点灯用関数.未使用</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.main_init">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">main_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.main_init" title="Link to this definition">¶</a></dt>
+<dd><p>GPIOピンを用いた入出力を準備するためのメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pi</strong> (<em>piogio.pi</em>) -- pigpioライブラリのインスタンス. GPIOピンを制御するために使用</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>piogio.setmode(gpio,mode)</p>
+<blockquote>
+<div><p>gpio: 指定したいGPIOピン番号を指定. RasPberryPi上のハードウェアのピン番号</p>
+<p>mode: 指定したいGPIOピンの動作モードを表す整数値.</p>
+<blockquote>
+<div><p>pigpio.INPUT (0): 入力モード。GPIOピンが外部からの信号を読み取るために使用</p>
+<p>pigpio.OUTPUT (1): 出力モード。GPIOピンが外部のデバイスや回路に信号を送るために使用</p>
+</div></blockquote>
+</div></blockquote>
+<p>各種実行内容(同様の内容は省略)</p>
+<p>pi.set_mode(GPIO18_LED, pigpio.OUTPUT): GPIOピン GPIO18_LED を出力モードに設定</p>
+<p>pi.set_mode(GPIO12_DSW1, pigpio.INPUT): GPIOピン GPIO12_DSW1 を入力モードに設定</p>
+<blockquote>
+<div><p>SW1_1の状態を読み取るための準備. 他3行も同様</p>
+</div></blockquote>
+<p>pi.set_mode(<a href="#id1"><span class="problematic" id="id2">GPIO04_I2CEN1_</span></a>, pigpio.OUTPUT): GPIOピン GPIO04_I2CEN1_を出力モードに設定</p>
+<blockquote>
+<div><p>I2C通信のための入力の準備. 他4行も同様</p>
+</div></blockquote>
+<p>pi.set_mode(<a href="#id3"><span class="problematic" id="id4">GPIO25_SPI_OE_</span></a>, pigpio.OUTPUT): GPIOピン <a href="#id5"><span class="problematic" id="id6">GPIO25_SPI_OE_</span></a> を出力モードに設定</p>
+<blockquote>
+<div><p>SPI制御のための入力準備.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.mcp3204_read">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">mcp3204_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.mcp3204_read" title="Link to this definition">¶</a></dt>
+<dd><p>茎径センサ値,果実径値を取得するためのメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pi</strong> (<em>piogio.pi</em>) -- pigpioライブラリのインスタンス. GPIOピンを制御するために使用</p></li>
+<li><p><strong>ch</strong> (<em>int</em>) -- MPC3204のチャンネル番号 (0 or 1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fV</strong> -- 茎径センサ値, 果実径センサ値</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>pi.write(<a href="#id7"><span class="problematic" id="id8">GPIO25_SPI_OE_</span></a>, 1): GPIOピン GPIO25_SPI_OE_からの信号を読み取るためのモードに変更</p>
+<p>pi.spi_open(SPI0_BUS, SPI0_CLK_HZ, SPI0_MODE):</p>
+<blockquote>
+<div><p>SPIバス0を開き,指定のクロック速度とモードで通信を開始</p>
+<p>SPI0_BUS        = 0</p>
+<p>SPI0_CLK_HZ     = 1000000</p>
+<p>SPI0_MODE       = 3</p>
+</div></blockquote>
+<p>SPI通信ではMCP3204に対する3バイトのSPIコマンドが必要となる</p>
+<p>xferメソッドで指定する各バイトの値</p>
+<blockquote>
+<div><p>1バイト目: （0、0、0、0、0、Start、SGL/DIFF、D2）</p>
+<p>2バイト目: （D1、D0、何でもよいから6ビット分）</p>
+<p>3バイト目:  なんでもよい8ビット(ダミービット)</p>
+</div></blockquote>
+<p>chをこのフォーマットに適応するように整形を行う</p>
+<p>ch = ch &amp; 0x07: chの下位3ビットのみを抽出. 0b00000CCC (0～7)の形に整形</p>
+<p>txd = (0x06 | (ch &gt; 2), 0x00 | (ch &lt;&lt; 6), 0x00): MCP3204に対して適切なチャネルを指定するための3バイトのSPIコマンドを準備</p>
+<blockquote>
+<div><p>0x06 | (ch &gt; 2): 1バイト目</p>
+<blockquote>
+<div><p>'0606'(0b00000110): シングルエンドモードでの実行を指す．</p>
+<p>(ch &gt; 2): チャンネルのサイズに従って'0606'(0b00000011'0')の最終桁を'0'か'1'にするかを決定する.</p>
+<p>この操作を行うことで, ch&lt;3の場合('0606')とch&gt;=3の場合('0607')で分かれるチャンネル指定を正常に行うことができる</p>
+</div></blockquote>
+<p>0x00 | (ch &lt;&lt; 6): 2バイト目</p>
+<blockquote>
+<div><p>ch = ch &amp; 0x07: chは左づめの3bitに意味を持つビットが存在する状態にする.実際はchは0～3の値であり,意味を持つ値は2ビット分である.</p>
+<p>(ch &lt;&lt; 6): 6ビットだけchをシフトさせることで意味を持つビットをxferメソッド指定するビット位置に割り当てる. 最後に0x00との or演算を行うことで必要ビット以外のビット位置を0とし,指定フォーマットのバイトを作成する</p>
+</div></blockquote>
+<p>0x00: 3バイト目: xferメソッド実行時に必要であるが特別送信するデータがないためダミービットを指定する</p>
+</div></blockquote>
+<p>rxr, rxd = pi.spi_xfer(h, txd) の返却物</p>
+<blockquote>
+<div><p>rxr: 読み取りの結果やエラーコードなど、通信の成否や追加のステータス情報を格納</p>
+<p>rxd (list): rxd[0]: 1番目のバイト: 最初の送信データに対するMCP3204からの応答. (一般的には無視される)</p>
+<blockquote>
+<div><p>rxd[1]: 2番目のバイト: 下位4ビットにデータが含まれる</p>
+<p>rxd[2]: 3番目のバイト: 8ビットすべてにデータが含まれる</p>
+</div></blockquote>
+</div></blockquote>
+<p>pi.i2c_close(handle): I2Cハンドルを閉じてリソースを解放</p>
+<p>pi.write(<a href="#id9"><span class="problematic" id="id10">GPIO13_I2CEN4_</span></a>, 1): GPIOピン GPIO13_I2CEN4_を外部のデバイスや回路に信号を送るためのモードに変更</p>
+<p>nV = ((rxd[1] &lt;&lt; 8) | (rxd[2] &lt;&lt; 0)) &amp; 0x0fff: rxdのうちrxd[1]とrxd[2]の意味を持つビットを12ビットデータとしてnVに格納</p>
+<p>センサ固有の変換式に基づいて生データ(nV)を物理量に変換後返却</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.mcp3204ex_read">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">mcp3204ex_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.mcp3204ex_read" title="Link to this definition">¶</a></dt>
+<dd><p>茎径センサの値を取得するためのメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pi</strong> (<em>piogio.pi</em>) -- pigpioライブラリのインスタンス. GPIOピンを制御するために使用</p></li>
+<li><p><strong>ch</strong> -- MPC3204のチャンネル番号</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fV</strong> -- 果実径センサ値</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>未使用</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.s1133_ext">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">s1133_ext</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.s1133_ext" title="Link to this definition">¶</a></dt>
+<dd><p>光度センサからのデータを読み取り送信するメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lux</strong> (<em>int</em>) -- 光の強度</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_sensor.ADDR_I2C3">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">ADDR_I2C3</span></span><a class="headerlink" href="#read_sensor.ADDR_I2C3" title="Link to this definition">¶</a></dt>
+<dd><p>I2Cデバイスのアドレス</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>constants</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>他部分はdef s1133_int()と同様のため割愛.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.s1133_int">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">s1133_int</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.s1133_int" title="Link to this definition">¶</a></dt>
+<dd><p>光度センサからのデータを読み取り送信するメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lux</strong> (<em>int</em>) -- 光の強度</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_sensor.ADDR_I2C2">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">ADDR_I2C2</span></span><a class="headerlink" href="#read_sensor.ADDR_I2C2" title="Link to this definition">¶</a></dt>
+<dd><p>I2Cデバイスのアドレス</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>constants</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>pi.write(<a href="#id11"><span class="problematic" id="id12">GPIO05_I2CEN2_</span></a>, 0): GPIOピン GPIO05_I2CEN2_からの信号を読み取るためのモードに変更</p>
+<p>pi.i2c_open(1, addr, 0): I2Cデバイスとの通信を準備</p>
+<blockquote>
+<div><p>第1引数: 使用するI2Cバスの番号を指定. Raspberry Piの場合は'1'はI2Cバス1を指す</p>
+<p>第2引数: I2Cデバイスのアドレス</p>
+<p>第3引数: オプションフラグ. 基本的には0を指定</p>
+</div></blockquote>
+<p>rxr, rxd = pi.i2c_read_device(handle, 3):</p>
+<blockquote>
+<div><p>通信準備されたI2Cデバイスからデータを読み取る.今回の場合は3バイトのデータを読み取る</p>
+<p>rxr: 読み取りの結果やエラーコードなど、通信の成否や追加のステータス情報を格納</p>
+<blockquote>
+<div><p>rxr = 3: 指定したバイト数（この場合は3バイト）が正常に読み取られたことを示す</p>
+<p>rxr = 0: バイト数が0で、何も読み取られなかったことを示す</p>
+<blockquote>
+<div><p>rxrが0以下の場合,エラーとして処理</p>
+</div></blockquote>
+</div></blockquote>
+<p>rxd: 実際に読み取ったデータを格納</p>
+</div></blockquote>
+<p>pi.i2c_close(handle): I2Cハンドルを閉じてリソースを解放</p>
+<p>pi.write(<a href="#id13"><span class="problematic" id="id14">GPIO05_I2CEN2_</span></a>, 1): GPIOピン GPIO05_I2CEN2_を外部のデバイスや回路に信号を送るためのモードに変更</p>
+<p>受け取った3バイトのデータからセンサ測定値を抽出.</p>
+<p>正しくデータが得られなかった場合すべてのデータ値を0とする.</p>
+<p>センサ固有の変換式に基づいて生データを物理量に変換後返却</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.show_term">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">show_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.show_term" title="Link to this definition">¶</a></dt>
+<dd><p>デバッグ用</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.show_uart">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">show_uart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.show_uart" title="Link to this definition">¶</a></dt>
+<dd><p>デバッグ用</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.sht25_read">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">sht25_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.sht25_read" title="Link to this definition">¶</a></dt>
+<dd><p>温湿度センサからのデータを読み取り送信するメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fT</strong> (<em>float</em>) -- 温度</p></li>
+<li><p><strong>fH</strong> (<em>float</em>) -- 湿度</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_sensor.ADDR_I2C1">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">ADDR_I2C1</span></span><a class="headerlink" href="#read_sensor.ADDR_I2C1" title="Link to this definition">¶</a></dt>
+<dd><p>I2Cデバイスのアドレス</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>constants</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>pi.write(<a href="#id15"><span class="problematic" id="id16">GPIO04_I2CEN1_</span></a>, 0): GPIOピン GPIO04_I2CEN1_からの信号を読み取るためのモードに変更</p>
+<p>pi.i2c_open(1, addr, 0): I2Cデバイスとの通信を準備</p>
+<blockquote>
+<div><p>第1引数: 使用するI2Cバスの番号を指定. Raspberry Piの場合は'1'はI2Cバス1を指す</p>
+<p>第2引数: I2Cデバイスのアドレス</p>
+<p>第3引数: オプションフラグ. 基本的には0を指定</p>
+</div></blockquote>
+<p>pi.i2c_write_byte(handle, 0xE3): センサへ0xE3コマンドを送信.温度データを取得開始</p>
+<p>rxrT, rxdT = pi.i2c_read_device(handle, 3):</p>
+<p>通信準備されたI2Cデバイスから温度データを読み取る.今回の場合は3バイトのデータを読み取る</p>
+<p>rxrT: 読み取りの結果やエラーコードなど、通信の成否や追加のステータス情報を格納</p>
+<blockquote>
+<div><p>rxrT = 3: 指定したバイト数（この場合は3バイト）が正常に読み取られたことを示す</p>
+<p>rxrT = 0: 実行失敗時意図的に0に設定</p>
+<blockquote>
+<div><p>rxrTが0以下の場合,エラーとして処理</p>
+</div></blockquote>
+</div></blockquote>
+<p>rxdT: 実際に読み取ったデータを格納</p>
+<p>pi.i2c_write_byte(handle, 0xE3): センサへ0xE3コマンドを送信.湿度データを取得開始</p>
+<p>rxrH, rxdH = pi.i2c_read_device(handle, 3):</p>
+<blockquote>
+<div><p>通信準備されたI2Cデバイスから温度データを読み取る.今回の場合は3バイトのデータを読み取る</p>
+<p>rxrH: 読み取りの結果やエラーコードなど、通信の成否や追加のステータス情報を格納</p>
+<blockquote>
+<div><p>rxrH = 3: 指定したバイト数（この場合は3バイト）が正常に読み取られたことを示す</p>
+<p>rxrH = 0: 実行失敗時意図的に0に設定</p>
+</div></blockquote>
+<p>rxdH: 実際に読み取ったデータを格納</p>
+</div></blockquote>
+<p>pi.i2c_close(handle): I2Cハンドルを閉じてリソースを解放</p>
+<p>pi.write(<a href="#id17"><span class="problematic" id="id18">GPIO04_I2CEN1_</span></a>, 1): GPIOピン GPIO04_I2CEN1_を外部のデバイスや回路に信号を送るためのモードに変更</p>
+<p>以下の操作を温度センサ，湿度センサから得た測定値に対して実行</p>
+<blockquote>
+<div><p>受け取った3バイトのデータからセンサ測定値を抽出.正しくデータが得られなかった場合すべてのデータ値を0とする.</p>
+</div></blockquote>
+<p>各センサで固有の変換式に基づいて生データを物理量に変換して温度，湿度を返却</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.sht85_read">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">sht85_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.sht85_read" title="Link to this definition">¶</a></dt>
+<dd><p>強制通風筒からのデータを読み取り送信するメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fT</strong> (<em>float</em>) -- 温度</p></li>
+<li><p><strong>fH</strong> (<em>float</em>) -- 湿度</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_sensor.ADDR_I2C4">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">ADDR_I2C4</span></span><a class="headerlink" href="#read_sensor.ADDR_I2C4" title="Link to this definition">¶</a></dt>
+<dd><p>I2Cデバイスのアドレス</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>constants</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>pi.write(<a href="#id19"><span class="problematic" id="id20">GPIO13_I2CEN4_</span></a>, 0): GPIOピン GPIO13_I2CEN4_からの信号を読み取るためのモードに変更</p>
+<p>pi.i2c_open(1, addr, 0): I2Cデバイスとの通信を準備</p>
+<blockquote>
+<div><p>第1引数: 使用するI2Cバスの番号を指定. Raspberry Piの場合は'1'はI2Cバス1を指す</p>
+<p>第2引数: I2Cデバイスのアドレス</p>
+<p>第3引数: オプションフラグ. 基本的には0を指定</p>
+</div></blockquote>
+<p>txd = bytearray([0x24, 0x00]): センサへの送信コマンドを指定. コマンド(0x24, 0x00)は測定開始を表す</p>
+<p>pi.i2c_write_device(handle, txd): センサへコマンドを送信を実行</p>
+<p>rxr, rxd = pi.i2c_read_device(handle, 6):</p>
+<blockquote>
+<div><p>通信準備されたI2Cデバイスからデータを読み取る.今回の場合は6バイトのデータを読み取る</p>
+<p>rxr: 読み取りの結果やエラーコードなど、通信の成否や追加のステータス情報を格納</p>
+<blockquote>
+<div><p>rxr = 6: 指定したバイト数（この場合は6バイト）が正常に読み取られたことを示す</p>
+<p>rxr = 0: バイト数が0で、何も読み取られなかったことを示す</p>
+<blockquote>
+<div><p>rxrが0以下の場合,エラーとして処理. 実行失敗時意図的に0に設定</p>
+</div></blockquote>
+</div></blockquote>
+<p>rxd: 実際に読み取ったデータを格納</p>
+</div></blockquote>
+<p>pi.i2c_close(handle): I2Cハンドルを閉じてリソースを解放</p>
+<p>pi.write(<a href="#id21"><span class="problematic" id="id22">GPIO13_I2CEN4_</span></a>, 1): GPIOピン GPIO13_I2CEN4_を外部のデバイスや回路に信号を送るためのモードに変更</p>
+<p>受け取った6バイトのデータからセンサ測定値を抽出. 正しくデータが得られなかった場合すべてのデータ値を0とする.</p>
+<p>センサ固有の変換式に基づいて生データを物理量に変換後返却</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.signal_handler">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">signal_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.signal_handler" title="Link to this definition">¶</a></dt>
+<dd><p>デバッグ用</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_sensor.uart_write">
+<span class="sig-prename descclassname"><span class="pre">read_sensor.</span></span><span class="sig-name descname"><span class="pre">uart_write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#read_sensor.uart_write" title="Link to this definition">¶</a></dt>
+<dd><p>デバッグ用</p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">read_sensor module</a><ul>
+<li><a class="reference internal" href="#read_sensor.dsw_read"><code class="docutils literal notranslate"><span class="pre">dsw_read()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.init_pigpio"><code class="docutils literal notranslate"><span class="pre">init_pigpio()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.pi"><code class="docutils literal notranslate"><span class="pre">pi</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.led_show"><code class="docutils literal notranslate"><span class="pre">led_show()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.main_init"><code class="docutils literal notranslate"><span class="pre">main_init()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.mcp3204_read"><code class="docutils literal notranslate"><span class="pre">mcp3204_read()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.mcp3204ex_read"><code class="docutils literal notranslate"><span class="pre">mcp3204ex_read()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.s1133_ext"><code class="docutils literal notranslate"><span class="pre">s1133_ext()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.ADDR_I2C3"><code class="docutils literal notranslate"><span class="pre">ADDR_I2C3</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.s1133_int"><code class="docutils literal notranslate"><span class="pre">s1133_int()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.ADDR_I2C2"><code class="docutils literal notranslate"><span class="pre">ADDR_I2C2</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.show_term"><code class="docutils literal notranslate"><span class="pre">show_term()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.show_uart"><code class="docutils literal notranslate"><span class="pre">show_uart()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.sht25_read"><code class="docutils literal notranslate"><span class="pre">sht25_read()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.ADDR_I2C1"><code class="docutils literal notranslate"><span class="pre">ADDR_I2C1</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.sht85_read"><code class="docutils literal notranslate"><span class="pre">sht85_read()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.ADDR_I2C4"><code class="docutils literal notranslate"><span class="pre">ADDR_I2C4</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.signal_handler"><code class="docutils literal notranslate"><span class="pre">signal_handler()</span></code></a></li>
+<li><a class="reference internal" href="#read_sensor.uart_write"><code class="docutils literal notranslate"><span class="pre">uart_write()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/software-reference/module/read_sensor.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">read_sensor module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Mineno Laboratory.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

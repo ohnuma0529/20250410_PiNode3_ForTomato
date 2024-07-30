@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+
+<html lang="jp" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>SPRESENSEカメラの設定 &#8212; PiNode3 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b849a4e9" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=658d757c" />
+    
+    <script src="../_static/documentation_options.js?v=eb881c4a"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SPRESENSEカメラの設定</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="spresense">
+<h1>SPRESENSEカメラの設定<a class="headerlink" href="#spresense" title="Link to this heading">¶</a></h1>
+<p>SPRESENSEカメラを使用するためには、PCを用いて各種設定を書き込む必要があります。</p>
+</section>
+<section id="id1">
+<h1>ソフトウェアインストール<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>GitHubからソフトウェアのインストール</p>
+<p>はじめにPC上にボード上に書き込むプログラムをダウンロードします。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MinenoLab/PiNode3-SPRESENSE.git
+</pre></div>
+</div>
+<p>続いて、PCからボードに対して各種設定等を書き込むためのアプリケーションをインストールします。</p>
+<section id="arduino-ide">
+<h2>Arduino IDE<a class="headerlink" href="#arduino-ide" title="Link to this heading">¶</a></h2>
+<p>Arduino IDEはPCからSPRESENSEに対してプログラムを書き込むためのアプリケーションです。以下のリンクからダウンロードしてください。</p>
+<p><a class="reference external" href="https://developer.sony.com/spresense/development-guides/sdk_set_up_ja.html">Arduino IDEダウンロード</a></p>
+<p>上記リンクを開くと下記のようなサイトが開かれます。</p>
+<a class="reference internal image-reference" href="../_images/arduino_ide.png"><img alt="Arduino IDEダウンロード" class="align-center" src="../_images/arduino_ide.png" style="width: 50%;" /></a>
+<p>サイトの下記項目を実行してください。</p>
+<ul class="simple">
+<li><p>1.2 Arduino IDEのinstall</p></li>
+<li><p>1.3 USBドライバのインストール</p></li>
+<li><p>1.4 SPRESENSE Arduino board packageのinstall</p></li>
+<li><p>2.1 USBシリアルポートの接続</p></li>
+<li><p>2.2 SPRESENSEブートローダーのinstall</p></li>
+</ul>
+<p>サイト内の下記画像位置まで実行できればOKです。</p>
+<a class="reference internal image-reference" href="../_images/arduino_ide_install.png"><img alt="Arduino IDEダウンロード" class="align-center" src="../_images/arduino_ide_install.png" style="width: 50%;" /></a>
+<p>続いてArduino IDE内で使用するライブラリのインストールを行います。</p>
+</section>
+<section id="packetizer">
+<h2>Packetizerのインストール<a class="headerlink" href="#packetizer" title="Link to this heading">¶</a></h2>
+<p>Packetizerはカメラ画像を送信する際に利用するライブラリです。
+タブ-ツール/ライブラリに移動し、Packetizerを検索しインストールしてください。</p>
+<a class="reference internal image-reference" href="../_images/packetizer_install.png"><img alt="Packetizerインストール" class="align-center" src="../_images/packetizer_install.png" style="width: 50%;" /></a>
+<p>次にSPRESENSE側の各種設定を変更します。
+タブ-ツール/Memoryから以下のようにメモリサイズを変更してください。</p>
+<p>768KB(default) -&gt; 1536KB</p>
+<a class="reference internal image-reference" href="../_images/memory_size.png"><img alt="メモリサイズ変更" class="align-center" src="../_images/memory_size.png" style="width: 50%;" /></a>
+</section>
+<section id="id3">
+<h2>ボード書き込みエラー<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>インストール環境によりpgmspace.hが存在せず、エラーが発生する場合はあります。
+エラーの解決のためには以下の手順を実行してください。</p>
+<ol class="arabic simple">
+<li><p>以下のリンクからpgmspace.hをダウンロードしてください。</p></li>
+</ol>
+<p><a class="reference external" href="https://github.com/Patapom/Arduino/blob/master/Libraries/AVR%20Libc/avr-libc-2.0.0/include/avr/pgmspace.h">pgmspace.hダウンロード</a></p>
+<ol class="arabic simple" start="2">
+<li><p>ダウンロードしたpgmspace.hを以下のディレクトリにコピーしてください。</p></li>
+</ol>
+<p>Arduino/libraries/FastFRC/src/pgmspace.h</p>
+</section>
+<section id="id4">
+<h2>ボード書き込み<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>以上の設定が完了したら、SPRESENSEにプログラムを書き込みます。</p>
+</section>
+<section id="id5">
+<h2>SPRESENSEボードとの接続<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>はじめにPCとSPRESENSEボードをUSBケーブルで接続します。
+接続が完了するとArduino IDEのツールバーにポートが表示されます。</p>
+<a class="reference internal image-reference" href="../_images/arduino_port.png"><img alt="Arduino IDEポート" class="align-center" src="../_images/arduino_port.png" style="width: 50%;" /></a>
+</section>
+<section id="id6">
+<h2>ブートローダーの書き込み<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<p>書き込み対象のSPRESENSEを選択したら以下から書き込みを行います。
+タブ-ツール/ブートローダーを書き込む</p>
+<a class="reference internal image-reference" href="../_images/bootloader.png"><img alt="ブートローダー書き込み" class="align-center" src="../_images/bootloader.png" style="width: 50%;" /></a>
+<p>下記のようなメッセージが表示されれば成功です。</p>
+<a class="reference internal image-reference" href="../_images/bootloader_success.png"><img alt="ブートローダー書き込み成功" class="align-center" src="../_images/bootloader_success.png" style="width: 50%;" /></a>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">SPRESENSEカメラの設定</a></li>
+<li><a class="reference internal" href="#id1">ソフトウェアインストール</a><ul>
+<li><a class="reference internal" href="#arduino-ide">Arduino IDE</a></li>
+<li><a class="reference internal" href="#packetizer">Packetizerのインストール</a></li>
+<li><a class="reference internal" href="#id3">ボード書き込みエラー</a></li>
+<li><a class="reference internal" href="#id4">ボード書き込み</a></li>
+<li><a class="reference internal" href="#id5">SPRESENSEボードとの接続</a></li>
+<li><a class="reference internal" href="#id6">ブートローダーの書き込み</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/get-started/spresense.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PiNode3 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SPRESENSEカメラの設定</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Mineno Laboratory.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>
