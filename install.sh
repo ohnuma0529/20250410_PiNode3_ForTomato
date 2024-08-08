@@ -57,7 +57,10 @@ sudo cp src/* /usr/local/bin/pinode3
 sudo chmod 777 service/*
 sudo cp service/* /etc/systemd/system/
 sudo mkdir -p /home/pinode3/data/sensor/lost
-sudo mkdir -p /home/pinode3/data/image
+sudo mkdir -p /home/pinode3/data/image/image1
+sudo mkdir -p /home/pinode3/data/image/image2
+sudo mkdir -p /home/pinode3/data/image/image3
+sudo mkdir -p /home/pinode3/data/image/image4
 sudo cp src/previous_sensor_data.json /home/pinode3/data/sensor
 sudo cp config.json /home/pinode3/
 sudo chmod 666 /home/pinode3/config.json
