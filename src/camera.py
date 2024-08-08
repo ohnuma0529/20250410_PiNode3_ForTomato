@@ -90,7 +90,7 @@ class SPRESENSE:
             ・エラーが発生した場合再起動
 
         """
-        local_file_path = str(Path(self.config['camera']['image_dir']['local']) / Path(file_name))
+        local_file_path = str(Path(self.config['camera']['image_dir']) / Path(file_name))
 
         
         for i in range(3):
@@ -330,7 +330,7 @@ class UsbCamera:
         if not ret:
             return False
 
-        local_file_path = str(Path(self.config['camera']['image_dir']['local']) / Path(file_name))
+        local_file_path = str(Path(self.config['camera']['image_dir']) / Path(file_name))
         print(f"save image : {local_file_path}")
         cv2.imwrite(local_file_path, frame)
         return True

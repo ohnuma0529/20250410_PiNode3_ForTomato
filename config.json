@@ -74,7 +74,7 @@
 		}
     },
 	"camera"	: {
-		"image_dir" : "/home/pinode/data/image",
+		"image_dir" : "/home/pinode3/data/image",
 		"time_out" : {
 			"usb_camera"	: 20,
 			"SPRESENSE"		: 50
