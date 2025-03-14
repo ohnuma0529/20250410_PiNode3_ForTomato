@@ -2,7 +2,7 @@ import time
 import signal
 import sys
 
-#import pigpio
+import pigpio
 
 
 # --------------------------------------
