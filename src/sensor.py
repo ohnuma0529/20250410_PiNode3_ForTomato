@@ -126,7 +126,7 @@ class Sensor:
         
         except Exception as e:
             print(f"InfluxDBアップロードエラー: {e}")
-            # アップロード失敗時、CSVに保存
+        finally:
             csv_path = Path(self.config['sensor']['csv_dir']) / f"{self.config['device_id']}_{datetime.now().strftime('%Y%m%d-%H%M.csv')}"
             df.to_csv(csv_path)
     

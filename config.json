@@ -8,8 +8,8 @@
         "bucket"        : "pinode"
     },
     "sensor"    : {
-        "previous_data_path" : "/home/pinode3/data/sensor/previous_sensor_data.json",
-		"csv_dir" : "/home/pinode3/data/sensor/lost",
+        "previous_data_path" : "/home/pinode3/data/previous_sensor_data.json",
+		"csv_dir" : "/home/pinode3/data/sensor/",
         "i2c_command" : {
 			"i_v_light"     : "/usr/local/bin/read_sensor -t s1133 -i 0",
 			"u_v_light"     : "/usr/local/bin/read_sensor -t s1133 -i 1",
