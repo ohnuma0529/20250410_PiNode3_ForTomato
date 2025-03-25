@@ -6,4 +6,6 @@ timeout-decorator
 pyserial
 cobs
 Sphinx
-pigpio
+gpiozero
+smbus2
+adafruit-blinka

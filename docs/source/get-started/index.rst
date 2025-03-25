@@ -5,15 +5,17 @@ PiNode3 スタートガイド
 
 事前準備物
 -----------------------------------
-- Raspberry Pi 4 Model B+
-- MiscroSDカード
-- 標準センサ
-- 強制通風筒センサ
-- SPRESENSEカメラ
+1. Raspberry Pi 4 Model B+
+2. MiscroSDカード
+3. 標準センサ
+4. 強制通風筒センサ
+5. SPRESENSEカメラ
 
-前提条件
+動作条件
 -----------------------------------
-- Raspberry Pi OSをMicroSDカードにインストール済み
+- Raspberry Pi OS 64bit
+ - **OS** : Debian GNU/Linux12 (bookworm)
+ - **バージョンID** 12
 
 ハードウェアの組み立て
 -----------------------------------
@@ -72,6 +74,21 @@ PoE Cableは以下の向きで接続してください。
 
 以上でハードウェアセットアップは完了となります。
 
+
+Raspberry Pi OS インストール
+-----------------------------------
+Raspberry Pi Imagerを用いてRaspberry Pi OSを書き込みます。
+
+Raspberry Pi Imagerはこちらからインストールして下さい。
+[Raspberry Pi Imager Download Link](https://www.raspberrypi.com/software/)
+
+インストール後以下の設定でRaspberry Pi OSをインストールします。
+- Raspberry Pi デバイス：Raspberry Pi 4
+- OS : Raspberry Pi OS (64bit)
+- ストレージ : 事前に用意したMicroSDカード
+この時、追加の設定項目としてWiFiの設定とSSHの許可をしておくと後々便利です。
+
+これでRaspberry Pi OSのインストールは完了です。
 
 PiNode3 ソフトウェアインストール
 -----------------------------------
