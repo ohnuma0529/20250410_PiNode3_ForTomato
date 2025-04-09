@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Copy Folder Script at 1 AM Daily
+
+[Timer]
+OnCalendar=*-*-* 01:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

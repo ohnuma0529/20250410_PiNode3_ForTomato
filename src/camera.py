@@ -31,13 +31,15 @@ class Camera:
                  (str): (USB Cameraの場合)デバイスID 
                           
         """
+        # now_dateは20250409のような形
+        now_date = dt.datetime.now().strftime('%Y%m%d')
         devices = USB().get()
         for port, type, name in devices:
             if type == 'SPRESENSE':
-                file_name = "image{:1}/{}_{:02}_HDR_{}.jpg".format(port, self.config['device_id'], port, dt.datetime.now().strftime('%Y%m%d-%H%M'))
+                file_name = "image{:1}/{}/{}_{:02}_HDR_{}.jpg".format(port, now_date, self.config['device_id'], port, dt.datetime.now().strftime('%Y%m%d-%H%M'))
                 SPRESENSE(name).save(file_name)
             elif type == 'USB Camera':
-                file_name = "image{:1}/{}_{:02}_RGB_{}.jpg".format(port, self.config['device_id'], port, dt.datetime.now().strftime('%Y%m%d-%H%M'))
+                file_name = "image{:1}/{}/{}_{:02}_RGB_{}.jpg".format(port, now_date, self.config['device_id'], port, dt.datetime.now().strftime('%Y%m%d-%H%M'))
                 UsbCamera(name).save(file_name)
 
 class SPRESENSE:
@@ -91,7 +93,9 @@ class SPRESENSE:
 
         """
         local_file_path = str(Path(self.config['camera']['image_dir']) / Path(file_name))
-
+        # local_file_pathの一つ上のdir作成
+        # print(Path(local_file_path).parent)
+        Path(local_file_path).parent.mkdir(parents=True, exist_ok=True)
         
         for i in range(3):
             try:
@@ -331,6 +335,7 @@ class UsbCamera:
             return False
 
         local_file_path = str(Path(self.config['camera']['image_dir']) / Path(file_name))
+        Path(local_file_path).parent.mkdir(parents=True, exist_ok=True)
         print(f"save image : {local_file_path}")
         cv2.imwrite(local_file_path, frame)
         return True

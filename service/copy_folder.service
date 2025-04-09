@@ -1,0 +1,13 @@
+[Unit]
+Description=Copy Folder Script
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/usr/local/bin/pinode3
+ExecStart=/usr/local/bin/pinode3/python/pinode3/bin/python /usr/local/bin/pinode3/copy_folder.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,11 +1,22 @@
 {
-    "device_id" : "00",
+    "device_id" : "31",
     "influxdb"  : {
+		"url"			:"http://192.168.200.100:8086",
         "port"          : 8086,
-        "username"      : "pinode",
-        "password"      : "pinode-pass",
-        "organization"  : "pinode",
-        "bucket"        : "pinode"
+        "username"      : "happyai2023",
+        "password"      : "MNNlb#1401",
+        "organization"  : "MinenoLaboratory",
+        "bucket"        : "HappyQuality",
+		"token"			: "v6-cULkpbrgxStqN9MmyDNx4jGECM6IzHIomRV4-WVS_wEo4zgAfNz2AWyw6ZUTAyJpJ9j7TUxIWl0m_vsI6jw=="
+    },
+    "influxdb_edge"  : {
+		"url"			:"http://192.168.55.100:8086",
+        "port"          : 8086,
+        "username"      : "pi",
+        "password"      : "pi",
+        "organization"  : "MinenoLaboratory",
+        "bucket"        : "202502_HQ_Edge",
+		"token"			: "vGMU1VtJKbpC8HlMzRuyKP2lInNkkXbgLZsIEL_FqsoG7jV9bCbSrbj_X-_ObS2yOeUcHBFDdM7mfnVyfS5j9w=="
     },
     "sensor"    : {
         "previous_data_path" : "/home/pinode3/data/previous_sensor_data.json",
@@ -83,5 +94,12 @@
 			"usb_camera"	: 3,
 			"SPRESENSE"		: 3
 		}
-	}
+	},
+    "copy_folder"  : {
+		"edge_savepath"		: "/home/pinode3/data/image",
+        "server_IP"     	: "192.168.200.100",
+        "server_user"      	: "happyai2023",
+        "server_savepath"	: "/home/happyai2023/20250327_PiNode3_data",
+        "server_password"	: "MNNlb#1401"
+    }
 }

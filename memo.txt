@@ -1,0 +1,8 @@
+# ログみる
+journalctl -u data_collector.service -n 50 --no-pager
+
+# 画像移動
+sudo mkdir image4/past_image
+sudo mv image4/*.jpg image4/past_image/
+sudo mkdir image2/past_image
+sudo mv image2/*.jpg image2/past_image/

@@ -59,6 +59,7 @@ echo "=== pythonライブラリのインストール ==="
 python -m venv pinode3
 source pinode3/bin/activate
 pip install -r "requirements.txt"
+sudo apt install -y sshpass
 
 mkdir -p /usr/local/bin/pinode3/python/
 mv pinode3/ /usr/local/bin/pinode3/python/
@@ -98,4 +99,7 @@ sudo chmod -R 777 /home/pinode3/data
 echo === サービスファイルの登録 ===
 sudo systemctl daemon-reload
 sudo systemctl start data_collector.timer
+sudo systemctl enable data_collector.timer
 sudo systemctl start data_collector.service
+sudo systemctl start copy_folder.timer
+sudo systemctl enable copy_folder.timer

@@ -20,10 +20,13 @@ class InfluxDB:
         self.org        = pinode_config["influxdb"]["organization"]
         self.bucket     = pinode_config["influxdb"]["bucket"]
         self.device_id  = pinode_config["device_id"]
-        self.url        = f"http://localhost:{pinode_config['influxdb']['port']}"
+        self.url        = pinode_config["influxdb"]["url"]
+        self.token      = pinode_config["influxdb"]["token"]
 
-        with open(Path(__file__).parent / "token.txt") as f:
-            self.token = f.read().strip()
+        self.org_edge   = pinode_config["influxdb_edge"]["organization"]
+        self.bucket_edge= pinode_config["influxdb_edge"]["bucket"]
+        self.url_edge   = pinode_config["influxdb_edge"]["url"]
+        self.token_edge = pinode_config["influxdb_edge"]["token"]
     
     def upload_dataframe(self, data):
         """
@@ -46,6 +49,31 @@ class InfluxDB:
         write_api.write(
             self.bucket,
             self.org,
+            record=data,
+            data_frame_measurement_name=self.device_id
+        )
+
+    def upload_dataframe_edge(self, data):
+        """
+        データをInfluxDBへアップロードする際に使用
+        Notes:
+            write_Options=SYNCRONOUS: データの書き込みを同期的に行う．データが完全に書き終わるまでプログラムの実行を停止．
+        
+            書き込み内容のパラメータ:
+                bucket : データを書き込むバケット名．データベースのようなもの
+                
+                org    : InfluxDBのオーガニゼーション名
+                
+                record : 書き込むデータ
+                
+                data_frame_measurement_name : InfluxDBにおけるデータカテゴリのようなもの.SQLでいうテーブル名
+
+        """
+        write_client = InfluxDBClient(url=self.url_edge, token=self.token_edge, org=self.org_edge)
+        write_api = write_client.write_api(write_options=SYNCHRONOUS)
+        write_api.write(
+            self.bucket_edge,
+            self.org_edge,
             record=data,
             data_frame_measurement_name=self.device_id
         )
