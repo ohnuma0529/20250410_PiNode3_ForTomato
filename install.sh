@@ -60,6 +60,7 @@ python -m venv pinode3
 source pinode3/bin/activate
 pip install -r "requirements.txt"
 sudo apt install -y sshpass
+pip install psutil
 
 mkdir -p /usr/local/bin/pinode3/python/
 mv pinode3/ /usr/local/bin/pinode3/python/
@@ -103,3 +104,5 @@ sudo systemctl enable data_collector.timer
 sudo systemctl start data_collector.service
 sudo systemctl start copy_folder.timer
 sudo systemctl enable copy_folder.timer
+sudo systemctl start cpu_checker.service
+sudo systemctl enable cpu_checker.service

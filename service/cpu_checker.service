@@ -1,0 +1,15 @@
+[Unit]
+Description=CPU Checker for Raspberry Pi
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/pinode3/python/pinode3/bin/python /usr/local/bin/pinode3/cpu_checker.py
+WorkingDirectory=/usr/local/bin/pinode3
+Restart=always
+RestartSec=5
+User=root
+StandardOutput=append:/var/log/cpu_checker.log
+StandardError=append:/var/log/cpu_checker.log
+
+[Install]
+WantedBy=multi-user.target
