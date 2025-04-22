@@ -58,3 +58,6 @@ docs/_templates/
 
 # token.txtは追跡しない
 src/token.txt
+
+# Depthは追跡せずgit cloneする
+Depth-Anything-V2/

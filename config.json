@@ -90,9 +90,9 @@
 			"usb_camera"	: 20,
 			"SPRESENSE"		: 50
 		},
-		"max_retry_count" : {
-			"usb_camera"	: 3,
-			"SPRESENSE"		: 3
+	"max_retry_count" : {
+		"usb_camera"	: 3,
+		"SPRESENSE"		: 3
 		}
 	},
     "copy_folder"  : {
@@ -101,5 +101,19 @@
         "server_user"      	: "happyai2023",
         "server_savepath"	: "/home/happyai2023/20250327_PiNode3_data",
         "server_password"	: "MNNlb#1401"
+    },
+    "wilt"  : {
+		"wilt_flag" : true,
+        "tracking_num" : 10,
+        "server_flag": false,
+        "start_time" : "0000",
+        "end_time" : "2359",
+        "image_width" : 1024,
+        "image_height" : 1024,
+        "clip_width" : 640,
+        "clip_height" : 640,
+        "image_dir" : "/home/pinode3/data/image/image4",
+		"camera_usb" : "04",
+		"camera_type" : "HDR"
     }
 }

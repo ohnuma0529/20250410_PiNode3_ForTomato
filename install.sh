@@ -62,8 +62,9 @@ pip install -r "requirements.txt"
 sudo apt install -y sshpass
 pip install psutil
 
-mkdir -p /usr/local/bin/pinode3/python/
-mv pinode3/ /usr/local/bin/pinode3/python/
+sudo rm -rf /usr/local/bin/pinode3/python/
+sudo mkdir -p /usr/local/bin/pinode3/python/pinode3
+sudo mv pinode3/ /usr/local/bin/pinode3/python/
 deactivate
 
 echo === USB判別ドライバのインストール ===
@@ -79,6 +80,32 @@ else
 	echo "This device is not a Raspberry Pi."
 	exit 1
 fi
+
+# Depth Anythingのインストール
+echo === Depth Anythingのインストール ===
+if [ ! -d "./Depth-Anything-V2" ]; then
+    git clone https://github.com/DepthAnything/Depth-Anything-V2.git
+else
+    echo "Depth-Anything-V2 は既に存在します。"
+fi
+# Depth Anything の重みファイルをダウンロード
+DEPTH_MODEL_DIR="Depth-Anything-V2"
+MODEL_URL="https://huggingface.co/depth-anything/Depth-Anything-V2-Small/resolve/main/depth_anything_v2_vits.pth"
+MODEL_PATH="$DEPTH_MODEL_DIR/depth_anything_v2_vits.pth"
+mkdir -p "$DEPTH_MODEL_DIR"
+if [ ! -f "$MODEL_PATH" ]; then
+    echo "Depth Anything の重みファイルをダウンロード中..."
+    wget -O "$MODEL_PATH" "$MODEL_URL"
+    echo "ダウンロード完了: $MODEL_PATH"
+else
+    echo "重みファイルは既に存在します。"
+fi
+# Depth Anythingを/usr/local/bin/pinode3に移動
+sudo cp -r Depth-Anything-V2 /usr/local/bin/pinode3/
+sudo chmod 777 -R /usr/local/bin/pinode3/Depth-Anything-V2
+# weightsを/usr/local/bin/pinode3に移動
+sudo cp -r weights /usr/local/bin/pinode3/
+sudo chmod 777 -R /usr/local/bin/pinode3/weights
 
 ### python・サービス・設定ファイル等を移行する
 echo === Python/サービス/設定ファイルのコピー ===
