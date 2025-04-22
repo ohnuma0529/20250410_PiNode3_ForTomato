@@ -133,3 +133,6 @@ sudo systemctl start copy_folder.timer
 sudo systemctl enable copy_folder.timer
 sudo systemctl start cpu_checker.service
 sudo systemctl enable cpu_checker.service
+sudo systemctl start wilt.timer
+sudo systemctl enable wilt.timer
+sudo systemctl start wilt.service

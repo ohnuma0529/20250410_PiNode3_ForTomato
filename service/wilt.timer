@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Wilt Detection Every Minute at 40 Seconds
+
+[Timer]
+OnCalendar=*-*-* *:*:40
+AccuracySec=1s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

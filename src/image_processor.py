@@ -189,7 +189,7 @@ class image_processor:
         images = os.listdir(self.image_dir)
 
         if not images:
-            print("画像ファイルが存在しません")
+            print("画像フォルダが存在しません")
             return self.df
 
         #now_timeの画像を取得
