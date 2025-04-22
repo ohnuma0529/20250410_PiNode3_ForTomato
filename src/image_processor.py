@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import pandas as pd
 import sys
@@ -193,11 +193,14 @@ class image_processor:
             return self.df
 
         #now_timeの画像を取得
-        # file_name = self.now_time.strftime(f"{self.edge_id}_%Y%m%d_%H%M") + ".jpg"
-        file_name = self.edge_id + "_" + self.camera_usb + "_" + self.camera_type + "_" + self.now_time.strftime("%Y%m%d-%H%M") + ".jpg"
-        print("file_name:", file_name)
-        if file_name not in images:
-            print("画像ファイルが存在しません")
+        for i in range(3):
+            check_time = self.now_time - timedelta(minutes=i)
+            file_name = f"{self.edge_id}_{self.camera_usb}_{self.camera_type}_{check_time.strftime('%Y%m%d-%H%M')}.jpg"
+            print("file_name:", file_name)
+            if file_name in images:
+                break  # 見つかったらループ終了
+        else:
+            print("エラー: 対応する画像ファイルが3回試行しても見つかりません")
             return self.df
         image = cv2.imread(os.path.join(self.image_dir, file_name))
         image = cv2.resize(image, (self.detect_size, self.detect_size))
