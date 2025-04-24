@@ -121,11 +121,16 @@ class Sensor:
         )
 
         try:
-            # InfluxDBにデータをアップロード
-            InfluxDB().upload_dataframe(df)
-        
+            InfluxDB().upload_dataframe_edge(df)
         except Exception as e:
-            print(f"InfluxDBアップロードエラー: {e}")
+            print("InfluxDB(edge) Error")
+            print(e)
+
+        try:
+            InfluxDB().upload_dataframe(df)
+        except Exception as e:
+            print("InfluxDB(server) Error")
+            print(e)
         finally:
             csv_path = Path(self.config['sensor']['csv_dir']) / f"{self.config['device_id']}_{datetime.now().strftime('%Y%m%d-%H%M.csv')}"
             df.to_csv(csv_path)

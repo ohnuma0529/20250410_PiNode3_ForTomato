@@ -59,16 +59,20 @@ def cal_wilt():
         end_time = time.time()
         inference_time = end_time - start_time
 
-        # 制御部のInfluxDBにアップロード部分は制御部のDBができてから作成する
-        # dfのfinal_wiltの最新の値，inference_timeをnow_timeでアップロードする
-        # measurementはid(str)，fieldはwiltとinference_time
-        infdb = InfluxDBWrapper("influxdb_edge")
-        infdb.write_single_point(edge_id, now_time, "wilt", float(df['final_wilt'].iloc[-1]))
-        infdb.write_single_point(edge_id, now_time, "inference_time", inference_time)
-
-        infdb_server = InfluxDBWrapper("influxdb")
-        infdb_server.write_single_point(edge_id, now_time, "wilt", float(df['final_wilt'].iloc[-1]))
-        infdb_server.write_single_point(edge_id, now_time, "inference_time", inference_time)
+        try:
+            infdb = InfluxDBWrapper("influxdb_edge")
+            infdb.write_single_point(edge_id, now_time, "wilt", float(df['final_wilt'].iloc[-1]))
+            infdb.write_single_point(edge_id, now_time, "inference_time", inference_time)
+        except Exception as e:
+            print("InfluxDB(edge) Error")
+            print(e)
+        try:
+            infdb_server = InfluxDBWrapper("influxdb")
+            infdb_server.write_single_point(edge_id, now_time, "wilt", float(df['final_wilt'].iloc[-1]))
+            infdb_server.write_single_point(edge_id, now_time, "inference_time", inference_time)
+        except Exception as e:
+            print("InfluxDB(server) Error")
+            print(e)
     else:
         print("動作時間外：",now_time)
 if __name__ == "__main__":

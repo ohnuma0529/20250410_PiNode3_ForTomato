@@ -31,12 +31,18 @@ while True:
     if cpu_temp is None:
         print("CPU温度が取得できませんでした。")
         continue
-    # influxDBにアップロード
-    infdb.write_single_point(edge_id, now_time, "cpu_usage", cpu_usage)
-    infdb.write_single_point(edge_id, now_time, "cpu_temp", cpu_temp)
-    # server側にもアップロード
-    infdb_server.write_single_point(edge_id, now_time, "cpu_usage", cpu_usage)
-    infdb_server.write_single_point(edge_id, now_time, "cpu_temp", cpu_temp)
+    try:
+        infdb.write_single_point(edge_id, now_time, "cpu_usage", cpu_usage)
+        infdb.write_single_point(edge_id, now_time, "cpu_temp", cpu_temp)
+    except Exception as e:
+        print("InfluxDB(edge) Error")
+        print(e)
+    try:
+        infdb_server.write_single_point(edge_id, now_time, "cpu_usage", cpu_usage)
+        infdb_server.write_single_point(edge_id, now_time, "cpu_temp", cpu_temp)
+    except Exception as e:
+        print("InfluxDB(server) Error")
+        print(e)
 
     print(f"CPU Usage: {cpu_usage}%, CPU Temp: {cpu_temp}°C")
     time.sleep(10)

@@ -10,10 +10,10 @@ import time
 from ultralytics import YOLO
 
 try:
-    sys.path.append("Depth-Anything-V2")
+    sys.path.append("/usr/local/bin/pinode3/Depth-Anything-V2")
     from depth_anything_v2.dpt import DepthAnythingV2
 except ImportError:
-    sys.path.append("../Depth-Anything-V2")
+    sys.path.append("/home/pi/20250410_PiNode3_ForTomato/Depth-Anything-V2")
     from depth_anything_v2.dpt import DepthAnythingV2
 
 import util
@@ -28,9 +28,9 @@ def get_depth_map(image):
     }
     depth_model = DepthAnythingV2(**model_configs[encoder])
     try:
-        depth_model.load_state_dict(torch.load(f"Depth-Anything-V2/depth_anything_v2_{encoder}.pth", map_location="cpu"))
+        depth_model.load_state_dict(torch.load(f"/usr/local/bin/pinode3/Depth-Anything-V2/depth_anything_v2_{encoder}.pth", map_location="cpu"))
     except FileNotFoundError:
-        depth_model.load_state_dict(torch.load(f"../Depth-Anything-V2/depth_anything_v2_{encoder}.pth", map_location="cpu"))
+        depth_model.load_state_dict(torch.load(f"/home/pi/20250410_PiNode3_ForTomato/Depth-Anything-V2/depth_anything_v2_{encoder}.pth", map_location="cpu"))
     #以下2行はGPUテスト用
     # depth_model.eval()
     # depth_model = depth_model.to('cuda')
@@ -166,8 +166,8 @@ class image_processor:
                 self.pose = YOLO("weights/pose/20241217_3200aug.pt")
             except Exception as e:
                 # print("Error loading model:", e)
-                self.detect = YOLO("../weights/detect/20241106_detect_saved_model/20241106_detect_float32.tflite")
-                self.pose = YOLO("../weights/pose/20241217_3200aug.pt")
+                self.detect = YOLO("/home/pi/20250410_PiNode3_ForTomato/weights/detect/20241106_detect_saved_model/20241106_detect_float32.tflite")
+                self.pose = YOLO("/home/pi/20250410_PiNode3_ForTomato/weights/pose/20241217_3200aug.pt")
         
         self.detect_size = 1024
         self.pose_size = 640
@@ -208,7 +208,7 @@ class image_processor:
         depth = get_depth_map(image)
 
         # 葉のBBox検出
-        results = self.detect.predict(image, imgsz=self.detect_size, conf=0.3)
+        results = self.detect.predict(image, imgsz=self.detect_size, conf=0.3, save=False, project="/tmp")
 
         result = results[0]
         bbox_list = [box.xyxy[0].tolist() for box in result.boxes]
@@ -248,7 +248,7 @@ class image_processor:
             clip, new_x1, new_y1, new_x2, new_y2 = get_frame(image, [x1, y1, x2, y2])
             clip = cv2.resize(clip, (self.pose_size, self.pose_size))
             # POSE推定
-            pose_results = self.pose.predict(clip, imgsz=640, conf=0.1)
+            pose_results = self.pose.predict(clip, imgsz=640, conf=0.1, save=False, project="/tmp")
             xys = pose_results[0].keypoints.xy[0].tolist()
             base_x, base_y = xys[0][0], xys[0][1]
             tip_x, tip_y = xys[1][0], xys[1][1]
@@ -436,19 +436,25 @@ class image_processor:
         images = os.listdir(self.image_dir)
 
         if not images:
-            print("画像ファイルが存在しません")
+            print("画像フォルダが存在しません")
             return self.df
 
-        file_name = self.now_time.strftime(f"{self.edge_id}_%Y%m%d_%H%M") + ".jpg" 
-        if file_name not in images:
-            print("画像ファイルが存在しません")
+        #now_timeの画像を取得
+        for i in range(3):
+            check_time = self.now_time - timedelta(minutes=i)
+            file_name = f"{self.edge_id}_{self.camera_usb}_{self.camera_type}_{check_time.strftime('%Y%m%d-%H%M')}.jpg"
+            print("file_name:", file_name)
+            if file_name in images:
+                break  # 見つかったらループ終了
+        else:
+            print("エラー: 対応する画像ファイルが3回試行しても見つかりません")
             return self.df
         image = cv2.imread(os.path.join(self.image_dir, file_name))
         image = cv2.resize(image, (self.detect_size, self.detect_size))
         self.key_list = [int(i.split("_")[0]) for i in self.df.columns if "_bbox_x1" in i]
         print("key_list:", self.key_list)
         try:
-            results = self.detect.predict(image, imgsz=self.detect_size, conf=0.3)
+            results = self.detect.predict(image, imgsz=self.detect_size, conf=0.3, save=False, project="/tmp")
             result = results[0]
             bbox_list = [box.xyxy[0].tolist() for box in result.boxes]
 
@@ -470,7 +476,7 @@ class image_processor:
                 clip, new_x1, new_y1, new_x2, new_y2 = get_frame(image, [x1, y1, x2, y2])
                 clip = cv2.resize(clip, (self.pose_size, self.pose_size))
                 # POSE推定
-                pose_results = self.pose.predict(clip, imgsz=640, conf=0.1)
+                pose_results = self.pose.predict(clip, imgsz=640, conf=0.1, save=False, project="/tmp")
                 xys = pose_results[0].keypoints.xy[0].tolist()
                 base_x, base_y = xys[0][0], xys[0][1]
                 tip_x, tip_y = xys[1][0], xys[1][1]

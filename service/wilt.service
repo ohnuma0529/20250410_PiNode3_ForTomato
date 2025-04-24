@@ -16,7 +16,7 @@ Environment="PIGPIO_ADDR=localhost"
 Environment="PIGPIO_PORT=8888"
 # 権限の設定
 User=root
-Group=gpio
+Group=root
 CapabilityBoundingSet=CAP_SYS_RAWIO
 AmbientCapabilities=CAP_SYS_RAWIO
 # デバッグ用のログ出力
