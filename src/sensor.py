@@ -54,7 +54,7 @@ class Sensor:
             "temperature", "humidity", 
             "i_v_light", "u_v_light", 
             "temperature_hq", "humidity_hq", 
-            "stem", "fruit_diagram"
+            "Stem", "fruit_diagram"
         ]
     
     def get(self, sensor:str):

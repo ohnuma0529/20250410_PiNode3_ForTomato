@@ -163,8 +163,8 @@ class SensorManager:
             "humidity": lambda: self.sht25_read()[1],
             "temperature_hq": lambda: 0,
             "humidity_hq": lambda: 0,
-            "stem": lambda: self.stem_fruit_read()[0],
-            "fruit_diagram": lambda: stem_fruit_read()[1]
+            "Stem": lambda: self.stem_fruit_read(),
+            # "fruit_diagram": lambda: self.stem_fruit_read()[1]
         }
 
         if sensor in sensor_map:
@@ -183,7 +183,7 @@ def main():
             print(f"湿度: {sensor_manager.get('humidity'):.2f} %")
             print(f"内部照度: {sensor_manager.get('i_v_light')} lux")
             print(f"外部照度: {sensor_manager.get('u_v_light')} lux")
-            print(f"茎径: {sensor_manager.get('stem')} mm")
+            print(f"茎径: {sensor_manager.get('Stem')} mm")
             print("--------------------------")
             time.sleep(1)
     except KeyboardInterrupt:
