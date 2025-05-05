@@ -1,0 +1,7 @@
+[Unit]
+Description=Daily Reboot Service
+Wants=daily-reboot.timer
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/shutdown -r now

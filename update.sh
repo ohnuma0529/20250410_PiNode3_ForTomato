@@ -30,5 +30,7 @@ sudo systemctl enable cpu_checker.service
 sudo systemctl start wilt.timer
 sudo systemctl enable wilt.timer
 sudo systemctl start wilt.service
+sudo systemctl enable daily_reboot.timer
+sudo systemctl start daily_reboot.timer
 
 echo "=== 更新完了 ==="
