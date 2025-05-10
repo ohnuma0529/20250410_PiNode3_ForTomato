@@ -104,7 +104,7 @@
     },
     "wilt"  : {
 		"wilt_flag" : true,
-        "tracking_num" : 10,
+        "tracking_num" : 15,
         "server_flag": true,
         "start_time" : "0700",
         "end_time" : "1700",
