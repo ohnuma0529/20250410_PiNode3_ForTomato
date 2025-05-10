@@ -94,21 +94,46 @@ def remove_edge_bbox(bbox_list, height, width, rate=0.95):
     return [new_bbox_list, new_depth_list]
 
 def get_first_bbox(bbox_list, depth, height=1024, width=1024, leaf_num=5):
+    # 深度でソートし、奥のものを除去
     con_list = calc_depth(bbox_list, depth)
     con_list = remove_edge_bbox(con_list, height, width)
-    #con_list[0]のbbox座標から、bboxの面積を計算し、画像サイズの半分以上だったら削除
-    new_bbox_list = []
-    new_depth_list = []
-    for i, bbox in enumerate(con_list[0]):
+
+    # 深度が高い順で leaf_num * 2 件までに絞る（多少余裕を持たせる）
+    top_depth_bbox = con_list[0][:leaf_num * 2]
+    top_depth_vals = con_list[1][:leaf_num * 2]
+
+    scored_items = []
+
+    for i, bbox in enumerate(top_depth_bbox):
         x1, y1, x2, y2 = bbox
         area = (x2 - x1) * (y2 - y1)
-        if area <= (height * width) / 2:
-            new_bbox_list.append(bbox)
-            new_depth_list.append(con_list[1][i])
-            if len(new_bbox_list) == leaf_num:
-                break
-    new_list = [new_bbox_list, new_depth_list]
-    return new_list
+        if area > (height * width) / 2:
+            continue  # 面積がでかすぎるものは排除
+
+        # bbox中心と画像中心の距離（小さいほどスコアが高くなる）
+        bbox_cx = (x1 + x2) / 2
+        bbox_cy = (y1 + y2) / 2
+        img_cx = width / 2
+        img_cy = height / 2
+        dist_center = np.sqrt((bbox_cx - img_cx) ** 2 + (bbox_cy - img_cy) ** 2)
+
+        # スコア計算（重みは調整可能）
+        area_score = area / (height * width)  # 0〜1スケール
+        dist_score = 1 - (dist_center / (np.sqrt(width**2 + height**2)))  # 0〜1スケール（中央に近いほど高い）
+        depth_score = top_depth_vals[i] / 255  # 正規化
+
+        total_score = 0.4 * area_score + 0.4 * dist_score + 0.2 * depth_score
+
+        scored_items.append((bbox, top_depth_vals[i], total_score))
+
+    # スコアでソート
+    scored_items.sort(key=lambda x: x[2], reverse=True)
+
+    # 上位 leaf_num 件を返す
+    selected_bbox = [item[0] for item in scored_items[:leaf_num]]
+    selected_depth = [item[1] for item in scored_items[:leaf_num]]
+
+    return [selected_bbox, selected_depth]
 
 #bboxどうしのIoUを計算する関数
 def calc_iou(bbox1, bbox2):
@@ -158,8 +183,8 @@ class image_processor:
         self.camera_type = setting["wilt"]["camera_type"]
 
         if self.server_flag:
-            self.detect = YOLO("weights/detect/20241106_detect.pt")
-            self.pose = YOLO("weights/pose/20241217_3200aug.pt")
+            self.detect = YOLO("weights/detect/20250510_detect.pt")
+            self.pose = YOLO("weights/pose/20250510_pose.pt")
         else:
             try:
                 self.detect = YOLO("weights/detect/20241106_detect_saved_model/20241106_detect_float32.tflite")
@@ -176,13 +201,6 @@ class image_processor:
     def get(self):
         return self.df
 
-    #初回画像，再検出時の処理
-    #深度推定，葉のBBox検出，BBoxの平均深度計算，追跡数までを追跡対象としてbbox情報をdfに保存
-    #処理後にre_detectionを0にして返す
-    # todo
-    # 1. 再検出時に生き残っている葉を引き継ぐ機能
-    #   ➡葉削除時に，列を消すのではなく，更新しないだけに留める
-    # 2. 現在トラッキング中の葉の
     def first_detection(self):
         # image_dirの中で最も新しい画像を取得．
         # 01_20250208_0701.jpgの形式．0701部分が時分を表す
@@ -294,69 +312,94 @@ class image_processor:
 
     # 更新されていないbboxがある場合、そのbboxを削除する関数
     def check_bbox(self):
-        if len(self.df[str(self.key_list[0]) + '_bbox_x1'].dropna()) < 10:
+        if len(self.df[str(self.key_list[0]) + '_bbox_x1'].dropna()) < 35:
             return self.df, self.key_list
-        for i in self.key_list:
-            if len(self.df[str(i) + '_bbox_x1'].dropna()) < 10:
+        for i in self.key_list.copy():
+            col_prefix = str(i) + '_bbox_'
+            x1 = self.df[col_prefix + 'x1'].dropna()
+            y1 = self.df[col_prefix + 'y1'].dropna()
+            x2 = self.df[col_prefix + 'x2'].dropna()
+            y2 = self.df[col_prefix + 'y2'].dropna()
+
+            if len(x1) < 35:
                 continue
-            # 時点前のbbox
-            bbox10 = [self.df[str(i) + "_bbox_x1"].dropna().iloc[-10], self.df[str(i) + "_bbox_y1"].dropna().iloc[-10], self.df[str(i) + "_bbox_x2"].dropna().iloc[-10], self.df[str(i) + "_bbox_y2"].dropna().iloc[-10]]
-            bbox5 = [self.df[str(i) + "_bbox_x1"].dropna().iloc[-5], self.df[str(i) + "_bbox_y1"].dropna().iloc[-5], self.df[str(i) + "_bbox_x2"].dropna().iloc[-5], self.df[str(i) + "_bbox_y2"].dropna().iloc[-5]]
-            bbox3 = [self.df[str(i) + "_bbox_x1"].dropna().iloc[-3], self.df[str(i) + "_bbox_y1"].dropna().iloc[-3], self.df[str(i) + "_bbox_x2"].dropna().iloc[-3], self.df[str(i) + "_bbox_y2"].dropna().iloc[-3]]
-            bbox = [self.df[str(i) + "_bbox_x1"].dropna().iloc[-1], self.df[str(i) + "_bbox_y1"].dropna().iloc[-1], self.df[str(i) + "_bbox_x2"].dropna().iloc[-1], self.df[str(i) + "_bbox_y2"].dropna().iloc[-1]]
-            # 4時点のbboxの座標が同じなら削除
-            if bbox == bbox3 == bbox5 == bbox10:
-                # remove_list = [col for col in self.df.columns if col.startswith(str(i) + "_")]
-                # self.df.drop(columns=remove_list, inplace=True)
-                # key_listから排除
+            # 30, 20, 10, 1分前（フレームインデックスで）を仮定
+            # 各インデックスのbbox座標を取得
+            bbox30 = [x1.iloc[-30], y1.iloc[-30], x2.iloc[-30], y2.iloc[-30]]
+            bbox20 = [x1.iloc[-20], y1.iloc[-20], x2.iloc[-20], y2.iloc[-20]]
+            bbox10 = [x1.iloc[-10], y1.iloc[-10], x2.iloc[-10], y2.iloc[-10]]
+            bbox1  = [x1.iloc[-1],  y1.iloc[-1],  x2.iloc[-1],  y2.iloc[-1]]
+
+            # すべてのbboxが同じなら削除対象
+            if bbox1 == bbox10 == bbox20 == bbox30:
                 self.key_list.remove(i)
         return self.df, self.key_list
     
     # IOUが0.8以上のbboxがある場合、数字の小さいほうのbboxを削除する関数
     def check_bbox2(self):
-        for i in self.key_list:
+        for i in self.key_list.copy():
             bbox = [self.df[str(i) + "_bbox_x1"].dropna().iloc[-1], self.df[str(i) + "_bbox_y1"].dropna().iloc[-1], self.df[str(i) + "_bbox_x2"].dropna().iloc[-1], self.df[str(i) + "_bbox_y2"].dropna().iloc[-1]]
             for j in self.key_list:
                 if i == j:
                     continue
                 bbox2 = [self.df[str(j) + "_bbox_x1"].dropna().iloc[-1], self.df[str(j) + "_bbox_y1"].dropna().iloc[-1], self.df[str(j) + "_bbox_x2"].dropna().iloc[-1], self.df[str(j) + "_bbox_y2"].dropna().iloc[-1]]
                 iou = calc_iou(bbox, bbox2)
-                if iou > 0.8:
+                if iou > 0.4:
                     if i > j:
-                        # remove_list = [col for col in self.df.columns if col.startswith(str(i) + "_")]
-                        # self.df.drop(columns=remove_list, inplace=True)
-                        self.key_list.remove(i)
+                        try:
+                            self.key_list.remove(i)
+                        except:
+                            continue
                     else:
-                        # remove_list = [col for col in self.df.columns if col.startswith(str(j) + "_")]
-                        # self.df.drop(columns=remove_list, inplace=True)
-                        self.key_list.remove(j)
+                        try:
+                            self.key_list.remove(j)
+                        except:
+                            continue
         return self.df, self.key_list
 
-    #10分前の角度と現在の角度の差を計算
-    # 全葉の角度変化の中央値の倍を閾値として、その値を超える葉を削除する関数
-    # 角度はラジアン
     def check_bbox3(self):
         angle_diff_list = []
-        for i in self.key_list:
-            if len(self.df[str(i) + '_angle'].dropna()) < 35:
-                return self.df, self.key_list
-            # angle_diffの絶対値を計算してリストに追加
-            angle_diff = abs(self.df[str(i) + "_angle"].dropna().iloc[-2] - self.df[str(i) + "_angle"].dropna().iloc[-30])
-            angle_diff_list.append(angle_diff)
-        # 絶対値の差の中央値に基づく閾値を設定
-        if len(self.df[str(self.key_list[0]) + '_angle'].dropna()) > 30:
-            threshold = 0.5
-        else:
-            threshold = np.median(angle_diff_list) * 20
-        # print("threshold:", threshold)
-        # print("angle_diff_list:", angle_diff_list)
 
-        for i, angle_diff in zip(self.key_list, angle_diff_list):
-            if angle_diff > threshold:  # 既に絶対値をとっているので条件はそのまま
-                # remove_list = [col for col in self.df.columns if col.startswith(str(i) + "_")]
-                # self.df.drop(columns=remove_list, inplace=True)
+        for i in self.key_list.copy():
+            angle_series = self.df[str(i) + '_angle'].dropna()
+
+            # 十分なデータがない場合はスキップ
+            if len(angle_series) < 15:
+                return self.df, self.key_list
+
+            # 階差（差分）を計算して合計を求める
+            angle_diffs = np.abs(np.diff(angle_series.iloc[-10:]))  # 直近10点の差分の絶対値
+            total_diff = np.sum(angle_diffs)
+            angle_diff_list.append((i, total_diff))
+
+        threshold = np.pi / 2  # 90度（ラジアン）
+
+        for i, total_diff in angle_diff_list:
+            if total_diff > threshold:
                 self.key_list.remove(i)
+
         return self.df, self.key_list
+
+    # 現在のkey_listのIDのbboxとそれより小さい数字のbboxのIoUを計算し，IoUが0.7以上ならIDを小さい数字に変更する関数
+    def check_bbox4(self):
+        for i in self.key_list.copy():
+            bbox = [self.df[str(i) + "_bbox_x1"].dropna().iloc[-1], self.df[str(i) + "_bbox_y1"].dropna().iloc[-1], self.df[str(i) + "_bbox_x2"].dropna().iloc[-1], self.df[str(i) + "_bbox_y2"].dropna().iloc[-1]]
+            past_id_list = []
+            # i より小さい数字のloop
+            for j in range(i-1, 0, -1):
+                try:
+                    bbox2 = [self.df[str(j) + "_bbox_x1"].dropna().iloc[-1], self.df[str(j) + "_bbox_y1"].dropna().iloc[-1], self.df[str(j) + "_bbox_x2"].dropna().iloc[-1], self.df[str(j) + "_bbox_y2"].dropna().iloc[-1]]
+                    iou = calc_iou(bbox, bbox2)
+                except:
+                    continue
+                if iou > 0.7:
+                    past_id_list.append(j)
+            # 過去のbboxの中で一番小さい数字を取得
+            if len(past_id_list) > 0:
+                min_id = min(past_id_list)
+                # key_listからiを削除して、min_idを追加
+                self.key_list.remove(i)
+                self.key_list.append(min_id)
 
     def cal_wilt(self):
                 # b'' を NaN に変換し、その後 NaN のある行を削除
@@ -396,23 +439,74 @@ class image_processor:
                 self.df[str(key) + "_wilt"] = 0
                 continue       
         return self.df
-    
-    def cal_final_wilt(self):
+
+    def cal_final_wilt(self, top_n=None):
         if len(self.df) < 35:
             self.df["final_wilt"] = 0
             return self.df
-        max_lifetime = 0
-        max_key = 1
+
+        candidates = []
+
         for key in self.key_list:
-            if not str(key) + "_wilt" in self.df.columns:
+            wilt_col = f"{key}_wilt"
+            angle_col = f"{key}_angle"
+
+            if wilt_col not in self.df.columns or angle_col not in self.df.columns:
                 continue
-            count = len(self.df[str(key) + "_wilt"].dropna()[self.df[str(key) + "_wilt"].dropna() != 0])
-            if count > max_lifetime:
-                max_lifetime = count
-                max_key = key
-        self.df["final_wilt"] = self.df[str(max_key) + "_wilt"]
-        # self.df["max_key"] = max_key
-        self.df.loc[self.now_time, "max_key"] = max_key
+
+            wilt_series = self.df[wilt_col].dropna()
+            angle_series = self.df[angle_col].dropna()
+
+            # 追跡時間（wiltが0でないデータ点の数）
+            tracking_time = len(wilt_series[wilt_series != 0])
+            if tracking_time < 10:
+                continue
+
+            # 角度変化の滑らかさ（差分の標準偏差の逆数）
+            if len(angle_series) < 5:
+                continue
+            angle_diff = angle_series.diff().dropna()
+            std_diff = angle_diff.std()
+            if std_diff == 0 or np.isnan(std_diff):
+                continue
+            smoothness = 1 / std_diff
+
+            candidates.append((key, tracking_time, smoothness))
+
+        if len(candidates) == 0:
+            self.df["final_wilt"] = 0
+            return self.df
+
+        # tracking_time 降順、同点は smoothness 降順でソート
+        candidates.sort(key=lambda x: (x[1], x[2]), reverse=True)
+
+        # 対象とする上位N個を決定（top_nがNoneなら全て）
+        top_keys = candidates if top_n is None else candidates[:top_n]
+
+        # 正規化のための最大値を取得
+        max_tracking = max([t for _, t, _ in top_keys])
+        max_smoothness = max([s for _, _, s in top_keys])
+
+        # 重み計算と合成
+        weighted_wilts = []
+        total_weight = 0
+        for key, tracking_time, smoothness in top_keys:
+            tracking_score = tracking_time / max_tracking if max_tracking > 0 else 0
+            smooth_score = smoothness / max_smoothness if max_smoothness > 0 else 0
+            weight = (tracking_score + smooth_score) / 2
+
+            weighted_wilts.append(self.df[f"{key}_wilt"].fillna(0) * weight)
+            total_weight += weight
+
+        if total_weight == 0:
+            self.df["final_wilt"] = 0
+        else:
+            self.df["final_wilt"] = sum(weighted_wilts) / total_weight
+
+        # 選ばれたキーの記録（最大3つ）
+        for i, (key, _, _) in enumerate(top_keys[:3]):
+            self.df.loc[self.now_time, f"{i+1}_top_key"] = key
+
         return self.df
     
     def get_key_list(self):
@@ -422,14 +516,30 @@ class image_processor:
 
         return bbox_ids
 
-    # 前回のbbox情報があることが前提
-    # 1. bboxの検出
-    # 2. IoUを計算して，追跡
-    # 　　➡前の行のBBoxがある列のみ処理
-    # 3. bboxから画像を切り出して640x640にリサイズ
-    # 4. POSE推定，元画像の座標に変換
-    # 5. 各情報をdfに保存
-    # 　　➡保存前に安定性を評価し，安定していない葉は更新しない
+    # 検出したbboxの座標が，過去のbboxと重なっていた場合に過去のbboxを復活させる関数 
+    def revive_bbox(self, bbox_list):
+        # self.dfの列名である，"_bbox_x1"の前の数字のリスト
+        past_bbox_list = [
+        int(re.match(r"(\d+)_bbox_x1", col).group(1))
+        for col in self.df.columns
+        if re.match(r"\d+_bbox_x1", col)
+        ]
+        # past_bbox_list内で，self.key_listに含まれないものを取得
+        past_bbox_list = [i for i in past_bbox_list if i not in self.key_list]
+        for i in past_bbox_list:
+            # 過去のbboxの座標
+            bbox = [
+                self.df[str(i) + "_bbox_x1"].dropna().iloc[-1],
+                self.df[str(i) + "_bbox_y1"].dropna().iloc[-1],
+                self.df[str(i) + "_bbox_x2"].dropna().iloc[-1],
+                self.df[str(i) + "_bbox_y2"].dropna().iloc[-1]
+            ]
+            # 過去のbboxと現在のbboxのIoUを計算
+            for bbox2 in bbox_list:
+                iou = calc_iou(bbox, bbox2)
+                if iou > 0.7:
+                    # 過去のbboxを復活させる
+                    self.key_list.append(i)
 
     def tracking(self):
         # 葉のBBox検出
@@ -462,6 +572,7 @@ class image_processor:
             self.check_bbox()
             self.check_bbox2()
             self.check_bbox3()
+            self.check_bbox4()
 
             # IoUが高いBBoxを用いて更新
             # bbox情報を更新
@@ -478,6 +589,12 @@ class image_processor:
                 # POSE推定
                 pose_results = self.pose.predict(clip, imgsz=640, conf=0.1, save=False, project="/tmp")
                 xys = pose_results[0].keypoints.xy[0].tolist()
+                if len(xys) == 0:
+                    cv2.imwrite(f"clips/error_{self.now_time}.jpg", clip)
+                    print("xysが空です。clipを保存しました。")
+                    # key_listから削除
+                    self.key_list.remove(i)
+                    continue
                 base_x, base_y = xys[0][0], xys[0][1]
                 tip_x, tip_y = xys[1][0], xys[1][1]
                 base_x = base_x /self.pose_size * (new_x2 - new_x1) + new_x1
@@ -496,7 +613,7 @@ class image_processor:
             self.cal_wilt()
             self.cal_final_wilt()
 
-            if len(self.key_list) < 5:
+            if len(self.key_list) < self.tracking_num//3:
                 self.df.loc[self.now_time, 're_detection'] = 1
         except:
             self.df.loc[self.now_time, 're_detection'] = 1
