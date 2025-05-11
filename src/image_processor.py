@@ -268,6 +268,13 @@ class image_processor:
             # POSE推定
             pose_results = self.pose.predict(clip, imgsz=640, conf=0.1, save=False, project="/tmp")
             xys = pose_results[0].keypoints.xy[0].tolist()
+            # xysが空ならclipを保存
+            if len(xys) == 0:
+                # cv2.imwrite(f"clips/error_{self.now_time}.jpg", clip)
+                print("xysが空です。")
+                # key_listから削除
+                self.key_list.remove(i)
+                continue
             base_x, base_y = xys[0][0], xys[0][1]
             tip_x, tip_y = xys[1][0], xys[1][1]
             base_x = base_x /self.pose_size * (new_x2 - new_x1) + new_x1
@@ -590,8 +597,8 @@ class image_processor:
                 pose_results = self.pose.predict(clip, imgsz=640, conf=0.1, save=False, project="/tmp")
                 xys = pose_results[0].keypoints.xy[0].tolist()
                 if len(xys) == 0:
-                    cv2.imwrite(f"clips/error_{self.now_time}.jpg", clip)
-                    print("xysが空です。clipを保存しました。")
+                    # cv2.imwrite(f"clips/error_{self.now_time}.jpg", clip)
+                    print("xysが空です。")
                     # key_listから削除
                     self.key_list.remove(i)
                     continue

@@ -15,6 +15,9 @@ sudo cp src/previous_sensor_data.json /home/pinode3/data
 sudo cp config.json /home/pinode3/
 sudo chmod 666 /home/pinode3/config.json
 sudo chmod -R 777 /home/pinode3/data
+# weightsを/usr/local/bin/pinode3に移動
+sudo cp -r weights /usr/local/bin/pinode3/
+sudo chmod 777 -R /usr/local/bin/pinode3/weights
 
 # systemd 再読み込みとサービスの再起動（任意）
 echo "=== systemd サービスの再起動 ==="
