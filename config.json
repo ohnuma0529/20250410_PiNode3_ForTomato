@@ -1,5 +1,5 @@
 {
-    "device_id" : "31",
+    "device_id" : "32",
     "influxdb"  : {
 		"url"			:"http://192.168.200.100:8086",
         "port"          : 8086,
@@ -100,7 +100,8 @@
         "server_IP"     	: "192.168.200.100",
         "server_user"      	: "happyai2023",
         "server_savepath"	: "/home/happyai2023/20250327_PiNode3_data",
-        "server_password"	: "MNNlb#1401"
+        "server_password"	: "MNNlb#1401",
+		"realtime_send"		: false
     },
     "wilt"  : {
 		"wilt_flag" : true,

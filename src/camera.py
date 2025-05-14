@@ -92,25 +92,64 @@ class SPRESENSE:
             ・エラーが発生した場合再起動
 
         """
-        local_file_path = str(Path(self.config['camera']['image_dir']) / Path(file_name))
-        # local_file_pathの一つ上のdir作成
-        # print(Path(local_file_path).parent)
-        Path(local_file_path).parent.mkdir(parents=True, exist_ok=True)
-        
+        self.local_file_path = Path(self.config['camera']['image_dir']) / file_name
+        self.local_file_path.parent.mkdir(parents=True, exist_ok=True)
+
         for i in range(3):
             try:
-                with serial.Serial(self.port_num, self.BAUD_RATE, timeout = 3) as ser:
+                with serial.Serial(self.port_num, self.BAUD_RATE, timeout=3) as ser:
                     time.sleep(2)
                     img = self._get_image_data(ser)
-                    print(f"save image : {local_file_path}")
-                    with open(local_file_path, "wb") as f:
+                    print(f"save image : {self.local_file_path}")
+                    with open(self.local_file_path, "wb") as f:
                         f.write(img)
+
+                # 転送と削除
+                if self.config['copy_folder']['realtime_send']:
+                    if self._send_scp():
+                        print(f"sent and removed: {self.local_file_path}")
+                        self.local_file_path.unlink()
+                    else:
+                        print("scp failed, keeping local file")
+
                 return True
             except Exception as e:
                 print(e)
                 self._reboot()
         print("failed to get image")
         return False
+
+    def _send_scp(self):
+        """
+        保存済みの画像をリモートサーバにscpで送信する（コマンドはフルパス指定）
+        """
+        import shutil
+
+        config = self.config
+        local_path = self.local_file_path.resolve()
+        image_root = Path(config['camera']['image_dir']).resolve()  # 例: /home/pinode3/data/image
+        relative_path = local_path.relative_to(image_root)           # 例: image4/20250514/31_04_HDR_...
+
+        remote_base = Path(config["copy_folder"]["server_savepath"]) / config["device_id"]
+        remote_dir = remote_base / relative_path.parent
+        remote_ip = config["copy_folder"]["server_IP"]
+        remote_user = config["copy_folder"]["server_user"]
+        password = config["copy_folder"]["server_password"]
+
+        # フルパス指定（systemd環境下でも確実に実行できるようにする）
+        sshpass = shutil.which("sshpass") or "/usr/bin/sshpass"
+        ssh = shutil.which("ssh") or "/usr/bin/ssh"
+        scp = shutil.which("scp") or "/usr/bin/scp"
+
+        # リモートディレクトリ作成（ssh）
+        mkdir_cmd = f'"{sshpass}" -p "{password}" "{ssh}" -o StrictHostKeyChecking=no {remote_user}@{remote_ip} "mkdir -p \\"{remote_dir}\\""'
+        subprocess.run(mkdir_cmd, shell=True)
+
+        # SCP送信
+        scp_cmd = f'"{sshpass}" -p "{password}" "{scp}" -o StrictHostKeyChecking=no "{local_path}" {remote_user}@{remote_ip}:"{remote_dir}/"'
+        result = subprocess.run(scp_cmd, shell=True)
+
+        return result.returncode == 0
 
     def _reboot(self):
         """Function
@@ -334,8 +373,12 @@ class UsbCamera:
         if not ret:
             return False
 
-        local_file_path = str(Path(self.config['camera']['image_dir']) / Path(file_name))
-        Path(local_file_path).parent.mkdir(parents=True, exist_ok=True)
-        print(f"save image : {local_file_path}")
-        cv2.imwrite(local_file_path, frame)
+        self.local_file_path = str(Path(self.config['camera']['image_dir']) / Path(file_name))
+        Path(self.local_file_path).parent.mkdir(parents=True, exist_ok=True)
+        print(f"save image : {self.local_file_path}")
+        cv2.imwrite(self.local_file_path, frame)
         return True
+
+if __name__ == "__main__":
+    camera = Camera()
+    camera.save_images()
