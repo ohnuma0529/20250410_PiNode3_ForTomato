@@ -1,5 +1,5 @@
 {
-    "device_id" : "32",
+    "device_id" : "31",
     "influxdb"  : {
 		"url"			:"http://192.168.200.100:8086",
         "port"          : 8086,
@@ -104,7 +104,7 @@
 		"realtime_send"		: false
     },
     "wilt"  : {
-		"wilt_flag" : true,
+		"wilt_flag" : false,
         "tracking_num" : 15,
         "server_flag": true,
         "start_time" : "0700",

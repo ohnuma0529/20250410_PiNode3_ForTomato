@@ -4,10 +4,10 @@ import pandas as pd
 from enum import Enum
 from pathlib import Path
 from datetime import datetime, timezone
-
 import read_sensor
 import util
 from db import InfluxDB
+
 
 class SensorResult(Enum):
     """
@@ -28,10 +28,21 @@ class SensorResult(Enum):
     MIN_VALUE_ERROR     = 4  
     MAX_VALUE_ERROR     = 5  
 
+
 class Sensor:
     """
     センサからの情報取得を行うクラス
     """
+    # センサ名
+    TEMP   = "temperature"
+    HD     = "humidity"
+    I_LX   = "i_v_light"
+    U_LX   = "u_v_light"
+    TEMPHQ = "temperature_hq"
+    HDHQ   = "humidity_hq"
+    STEM   = "stem"
+    FRUIT  = "fruit_diagram"
+
     def __init__(self):
         """
         センサクラスの初期化メソッド
@@ -49,20 +60,24 @@ class Sensor:
         with open(self.previous_data_path, "r") as f:
             self.previous_sensor_data = json.load(f)
 
-        # センサリストの取得
-        self.sensor_list = [
-            "temperature", "humidity", 
-            "i_v_light", "u_v_light", 
-            "temperature_hq", "humidity_hq", 
-            "Stem", "fruit_diagram"
-        ]
-    
-    def get(self, sensor:str):
+        # センサと取得メソッドの対応
+        self.sensors = {
+            Sensor.TEMP    : self.sensor_manager.temperature,
+            Sensor.HD      : self.sensor_manager.humidity,
+            Sensor.I_LX    : self.sensor_manager.inner_lx,
+            Sensor.U_LX    : self.sensor_manager.outer_lx,
+            Sensor.TEMPHQ  : self.sensor_manager.opt_temperature,
+            Sensor.HDHQ    : self.sensor_manager.opt_humidity,
+            Sensor.STEM    : self.sensor_manager.stem,
+            Sensor.FRUIT   : self.sensor_manager.fruit_diameter,
+        }
+ 
+    def get(self, sensor_name : str):
         """
         指定されたセンサのデータを取得するメソッド
         
         Args:
-            sensor(str): センサ名
+            sensor_name(str): センサ名
         
         Returns: 
             result(SensorResult): センサデータの状態
@@ -73,31 +88,30 @@ class Sensor:
             正常に取得できない場合は前回の値を返す
         """
         result = SensorResult.EMPTY_STRING_ERROR
-        max_retry = self.config['sensor']['max_retry_count'].get(sensor, 3)
-        
+        max_retry = self.config['sensor']['max_retry_count'].get(sensor_name, 3)
+
         for _ in range(max_retry):
             try:
                 # センサデータの取得
-                data = self.sensor_manager.get(sensor)
+                data = float(self.sensors[sensor_name])
                 # 取得後の待機時間
-                time.sleep(self.config['sensor']['sleep_time'].get(sensor, 0.1))
+                time.sleep(self.config['sensor']['sleep_time'].get(sensor_name, 0.1))
                 # データの妥当性検証
-                result = self._is_valid(data, sensor)
+                result = self._is_valid(data, sensor_name)
                 # データが正常な場合
                 if result == SensorResult.SUCCESS:
                     # 前回のセンサデータを更新
                     with open(self.previous_data_path, 'w') as f:
-                        self.previous_sensor_data[sensor] = float(data)
+                        self.previous_sensor_data[sensor_name] = data
                         json.dump(self.previous_sensor_data, f, indent=4)
-                    return result, float(data)
+                    return result, data
             except Exception as e:
-                print(f"センサ取得エラー ({sensor}): {e}")
+                print(f"センサ取得エラー ({sensor_name}): {e}")
             finally:
                 # リトライ間隔
-                time.sleep(self.config['sensor']['retry_interval'].get(sensor, 0.5))
-        
+                time.sleep(self.config['sensor']['retry_interval'].get(sensor_name, 0.5))
         # すべてのリトライに失敗した場合、前回の値を返す
-        return result, self.previous_sensor_data[sensor]
+        return result, self.previous_sensor_data[sensor_name]
 
     def upload_csv(self, upload_sensor_list=None):
         """
@@ -168,4 +182,5 @@ class Sensor:
 
 if __name__ == "__main__":
     sensor = Sensor()
-    sensor.upload_csv()
+    df = sensor.upload_csv()
+    print(df)
