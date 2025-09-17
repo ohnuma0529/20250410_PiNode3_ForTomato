@@ -14,6 +14,7 @@ sudo mkdir -p /home/pinode3/data/image/image4
 sudo cp src/previous_sensor_data.json /home/pinode3/data
 sudo cp config.json /home/pinode3/
 sudo chmod 666 /home/pinode3/config.json
+sudo chmod 755 /home/pinode3
 sudo chmod -R 777 /home/pinode3/data
 # weightsを/usr/local/bin/pinode3に移動
 sudo cp -r weights /usr/local/bin/pinode3/

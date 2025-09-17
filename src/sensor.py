@@ -41,7 +41,7 @@ class Sensor:
     TEMPHQ = "temperature_hq"
     HDHQ   = "humidity_hq"
     STEM   = "stem"
-    FRUIT  = "fruit_diagram"
+    FRUIT  = "soil_moisture"
 
     def __init__(self):
         """
@@ -124,16 +124,11 @@ class Sensor:
             指定がない場合は全センサのデータを取得
             データの取得に失敗した場合はCSVにデータを保存
         """
-        # センサリストが指定されていない場合は全センサを使用
-        if upload_sensor_list is None:
-            upload_sensor_list = self.sensor_list
-
         # センサデータの取得
         df = pd.DataFrame(
-            data  = {sensor_name: [self.get(sensor_name)[1]] for sensor_name in upload_sensor_list},
+            data  = {sensor_name : self.get(sensor_name)[1] for sensor_name in self.sensors.keys()},
             index = [datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')]
         )
-
         try:
             InfluxDB().upload_dataframe_edge(df)
         except Exception as e:

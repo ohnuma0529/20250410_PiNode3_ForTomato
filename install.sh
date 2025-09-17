@@ -122,6 +122,8 @@ sudo cp src/previous_sensor_data.json /home/pinode3/data
 sudo cp config.json /home/pinode3/
 sudo chmod 666 /home/pinode3/config.json
 sudo chmod -R 777 /home/pinode3/data
+sudo chmod 755 /home/pinode3
+
 
 ### サービスファイルの登録
 echo === サービスファイルの登録 ===
